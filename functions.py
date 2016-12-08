@@ -87,7 +87,7 @@ def find_treatment_energy(df, index1, totals):
     return treat_energy
 
 def find_treatment_embodied_energy(df, index1, totals,  ttype = False):
-    if type = False:
+    if type == False:
         treat_energy = 0
     else:
         flow = calc_flow(df, index1, totals)
