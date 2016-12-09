@@ -37,13 +37,11 @@ def create_tree(X_lat_lon_to_check, query_point):
     dist, index = tree.query(query_point, k=len(X_lat_lon_to_check))
     return dist, index
 
-def populate_Graph(G, start, index, dist, data):
-    for start in index:
-        G.add_node(start)
-        for destination in index:
-            G.add_node(destination)
-            dist = vincenty(data.iloc[start]['lat_lon'], data.iloc[destination]['lat_lon']).meters
-            G.add_path([item, destination], weight=dist)
+def populate_Graph(G, start, data):
+    G.add_node(start)
+    for destination in G.nodes():
+        dist = vincenty(data.iloc[int(start)]['lat_lon'], data.iloc[int(destination)]['lat_lon']).meters
+        G.add_path([start, destination], weight=dist)
 
 def find_MST_distance(G):
     MST_edges = nx.minimum_spanning_edges(G, weight='weight')
@@ -98,7 +96,7 @@ def find_treatment_embodied_energy(df, index1, totals,  ttype = False):
 def find_conveyance_energy(df, index1, totals, piping, floors):
     pump = ground_elevation_energy(df, index1, totals)
     pump_building = pump_energy_building(floors)
-    energy = pipe_m3+pump+pump_building
+    energy = pump+pump_building
     return energy
 
 def find_infrastructure_energy(df, index1, totals, piping):
