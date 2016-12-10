@@ -41,7 +41,7 @@ def populate_Graph(G, start, data):
     G.add_node(start)
     for destination in G.nodes():
         dist = vincenty(data.iloc[int(start)]['lat_lon'], data.iloc[int(destination)]['lat_lon']).meters
-        G.add_path([start, destination], weight=dist)
+        G.add_edge(start, destination, weight=dist)
 
 def find_MST_distance(G):
     MST_edges = nx.minimum_spanning_edges(G, weight='weight')
@@ -50,58 +50,52 @@ def find_MST_distance(G):
     MST_distance = sum(list(map(lambda t: t[2].get('weight', 1), edgelist)))
     return MST_distance
 
-def distance_lat_lon(df, index1, index2):
-    p1 = df.iloc[int(index1)]['lat_lon']
-    p2 = df.iloc[int(index2)]['lat_lon']
-    distance = vincenty(p1, p2).meters
-    return distance #m
-
-def ground_elevation(df, index1, totals):
-    min_elev = min(df.iloc[int(index1)]['ELEV_treat'],totals['ELEV_treat'])
-    max_elev = max(df.iloc[int(index1)]['ELEV_treat'],totals['ELEV_treat'])
+def ground_elevation(building_elevation, totals_elevation):
+    min_elev = min(building_elevation,totals_elevation)
+    max_elev = max(building_elevation,totals_elevation)
     elev_diff = max_elev-min_elev
     return elev_diff #m
 
-def ground_elevation_energy(df, index1, totals):
-    elev_diff = ground_elevation(df, index1, totals)
-    pump = elev_diff/3600*1*3.6 #MJ/m3
+def ground_elevation_energy(building_elevation, totals_elevation):
+    elev_diff = ground_elevation(building_elevation, totals_elevation)
+    pump = elev_diff*P.water_weight/1000 #MJ/m3
     return pump #MJ/m3
 
 def pump_energy_building(floors):
     elev_diff = floors*3
-    pump = elev_diff/3600*1*3.6 #MJ/m3
+    pump = elev_diff*P.water_weight/1000 #MJ/m3
     return pump #MJ/m3
 
-def calc_flow(df, index1, totals):
-    peop1 = df.iloc[int(index1)]['SUM_pop']
-    peop2 = totals['SUM_pop']
-    flow_tot = (peop1+peop2)*0.2 #m3/day
+def calc_flow(building_pop, totals_pop):
+    peop1 = building_pop
+    peop2 = totals_pop
+    flow_tot = (peop1+peop2)*P.water_demand #m3/day
     return flow_tot #m3/day
 
-def find_treatment_energy(df, index1, totals):
-    flow = calc_flow(df, index1, totals)
+def find_treatment_energy(building_pop, totals_pop):
+    flow = calc_flow(building_pop, totals_pop)
     #Find embodied energy function
-    treat_energy = 8*(flow)**(-0.1)*3.6*0.8
+    treat_energy = 9.5*(flow)**(-0.3)*3.6
     return treat_energy
 
-def find_treatment_embodied_energy(df, index1, totals,  ttype = False):
-    if type == False:
+def find_treatment_embodied_energy(building_pop, totals_pop,  ttype = False):
+    if ttype == False:
         treat_energy = 0
     else:
-        flow = calc_flow(df, index1, totals)
-        #treat_energy = 9.5*(flow)**(-0.3)*3.6
-        treat_energy = 8*(flow)**(-0.1)*3.6
+        flow = calc_flow(building_pop, totals_pop)
+        treat_energy = 9.5*(flow)**(-0.3)*3.6
+        #treat_energy = 8*(flow)**(-0.1)*3.6
     return treat_energy
 
-def find_conveyance_energy(df, index1, totals, piping, floors):
-    pump = ground_elevation_energy(df, index1, totals)
+def find_conveyance_energy(building_elevation, totals_elevation, floors):
+    pump = ground_elevation_energy(building_elevation, totals_elevation)
     pump_building = pump_energy_building(floors)
-    energy = pump+pump_building
+    energy = pump + pump_building
     return energy
 
-def find_infrastructure_energy(df, index1, totals, piping):
-    flow = calc_flow(df, index1, totals) #m3/day
+def find_infrastructure_energy(building_pop, totals_pop, piping):
+    flow = calc_flow(building_pop, totals_pop) #m3/day
     flow_s = flow/(24*3600)
-    pipe = piping*P.piping_embodied #MJ/d
-    pipe_m3 = pipe/flow #MJ/m3
+    pipe = piping*P.piping_embodied/P.pipe_lifetime #MJ/m
+    pipe_m3 = pipe/(flow*365) #MJ/m3
     return pipe_m3
