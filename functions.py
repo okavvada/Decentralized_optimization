@@ -32,6 +32,10 @@ def hierarchical_cluster(X_lat_lon, Z):
             i += 1 
     return clusters
 
+def distance(lat_lon1, latlon2):
+    dist = vincenty(lat_lon1, latlon2).meters
+    return dist
+
 def create_tree(X_lat_lon_to_check, query_point):
     tree = spatial.KDTree(X_lat_lon_to_check)
     dist, index = tree.query(query_point, k=len(X_lat_lon_to_check))
