@@ -1,4 +1,4 @@
-import: https://mapzen.com/carto/zinc-style/4/zinc-style.yaml
+import: https://mapzen.com/carto/walkabout-style-more-labels/walkabout-style-more-labels.yaml
 
 sources:
     buildings:
