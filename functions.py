@@ -1,7 +1,27 @@
 from geopy.distance import vincenty
 import networkx as nx
+import pandas as pd
 from scipy.cluster.hierarchy import dendrogram, linkage
+from shapely.geometry import Point
+from geojson import Polygon, Feature
+from scipy.spatial import ConvexHull
+import json
 import Parameters as P
+
+
+def readBuildings(path):
+	data_all = pd.read_csv(path)
+	data_all['lat_lon'] = data_all.apply(lambda row: (row['y_lat'], row['x_lon']), axis=1)
+	return data_all
+
+
+def findNClosest(index, dataframe):
+	data = pd.DataFrame()
+	for i in index:
+	    select_row = dataframe.iloc[[i]]
+	    data = data.append(select_row)
+	return data
+
 
 def hierarchical_cluster(X_lat_lon, Z):
     clusters = {}
@@ -36,10 +56,12 @@ def distance(lat_lon1, latlon2):
     dist = vincenty(lat_lon1, latlon2).meters
     return dist
 
+
 def create_tree(X_lat_lon_to_check, query_point):
     tree = spatial.KDTree(X_lat_lon_to_check)
     dist, index = tree.query(query_point, k=len(X_lat_lon_to_check))
     return dist, index
+
 
 def populate_Graph(G, start, data):
     G.add_node(start)
@@ -47,12 +69,14 @@ def populate_Graph(G, start, data):
         dist = vincenty(data.iloc[int(start)]['lat_lon'], data.iloc[int(destination)]['lat_lon']).meters
         G.add_edge(start, destination, weight=dist)
 
+
 def find_MST_distance(G):
     MST_edges = nx.minimum_spanning_edges(G, weight='weight')
     edgelist=list(MST_edges)
     MST_distance = 0
     MST_distance = sum(list(map(lambda t: t[2].get('weight', 1), edgelist)))
     return MST_distance
+
 
 def ground_elevation(building_elevation, totals_elevation):
     min_elev = min(building_elevation,totals_elevation)
@@ -87,8 +111,8 @@ def find_treatment_embodied_energy(building_pop, totals_pop,  ttype = False):
         treat_energy = 0
     else:
         flow = calc_flow(building_pop, totals_pop)
-        treat_energy = 9.5*(flow)**(-0.3)*3.6
-        #treat_energy = 8*(flow)**(-0.1)*3.6
+        #treat_energy = 9.5*(flow)**(-0.3)*3.6
+        treat_energy = 8*(flow)**(-0.1)*3.6
     return treat_energy
 
 def find_conveyance_energy(building_elevation, totals_elevation, floors):
@@ -103,3 +127,16 @@ def find_infrastructure_energy(building_pop, totals_pop, piping):
     pipe = piping*P.piping_embodied/P.pipe_lifetime #MJ/m
     pipe_m3 = pipe/(flow*365) #MJ/m3
     return pipe_m3
+
+def getPolygon(dataframe):
+	lat_lon_array = list(dataframe['lat_lon'])
+	hull = ConvexHull(lat_lon_array)
+	polygon_coords=[]
+	for simplex in hull.vertices:
+	    x= lat_lon_array[simplex][1]
+	    y = lat_lon_array[simplex][0]
+	    coords = (x,y)
+	    polygon_coords.append(coords)
+	polygon_coords_array = [polygon_coords + [polygon_coords[0]]]
+	polygon = Polygon(polygon_coords_array)
+	return polygon
