@@ -5,8 +5,9 @@ from scipy import spatial
 import networkx as nx
 import geopandas as gpd
 import json
-from geojson import Feature
-from shapely.geometry import Point
+import csv
+from geojson import Feature, Point, MultiPoint, FeatureCollection
+#from shapely.geometry import Point
 
 from functions import *
 import Parameters as P
@@ -14,8 +15,8 @@ import Parameters as P
 def getServiceArea(queryPoint):
 	data_all = readBuildings('../GIS_data/building_all_null.csv')
 	
-	if len(data_all)>1000:
-		k = 1000
+	if len(data_all)>400:
+		k = 400
 	else:
 	    k = len(data_all)
 
@@ -104,9 +105,18 @@ def getServiceArea(queryPoint):
 	output_points = findNClosest(cluster_points, data)
 	sum_population = output_points['SUM_pop'].sum()
 	num_houses = int(output_points['SUM_pop'].count())
+	coords = []
+	for index, row in output_points.iterrows():
+	    xy = (row['x_lon'], row['y_lat'])
+	    coords.append(xy)  
+	points = MultiPoint(coords)
 	polygon = getPolygon(output_points)
 	polygon_properties = Feature(geometry=polygon, properties={"population": sum_population,"houses": num_houses})
+	point_properties = Feature(geometry=points, properties={"population": sum_population})
+	#all_data = [points, polygon]
+	#collection = FeatureCollection(features = all_data, properties={"population": sum_population,"houses": num_houses})
+
 	with open('../GIS_data/polygon_.geojson', 'w') as outfile: 
 		json.dump(polygon, outfile)
 
-	return polygon_properties
+	return polygon_properties, point_properties
