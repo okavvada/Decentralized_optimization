@@ -25,6 +25,7 @@ var image = {
 
 	google.maps.event.addListener(map, 'click', function(event) {
 		placeMarker(event.latLng);
+		var place_lat_lon = event.latLng
 		$('#img').show(); 
 		$.getJSON("/lat_lng", {
 			lat: event.latLng.lat(),
@@ -41,8 +42,8 @@ var image = {
   			// When the user clicks, open an infowindow
 			map.data.addListener('mouseover', function(event) {
       			infowindow.setContent(html);
-      			infowindow.setPosition(event.feature.getGeometry().getAt(0).getAt(0));
-      			infowindow.setOptions({pixelOffset: new google.maps.Size(10,10)});
+      			infowindow.setPosition(place_lat_lon);
+      			//infowindow.setOptions({pixelOffset: new google.maps.Size(10,10)});
       			infowindow.open(map);
   			});
   			map.data.addListener('mouseout', function(event) {
