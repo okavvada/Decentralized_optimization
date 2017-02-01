@@ -6,7 +6,7 @@
 # FLASK_DEBUG=1 FLASK_APP=server.py flask run
 import flask
 from flask import Flask, request
-from optimization import *
+from optimization2 import *
 
 # set the project root directory as the static folder, you can set others.
 app = Flask(__name__)
@@ -25,7 +25,7 @@ def lat_lng():
 def getMyGeoJSON(lat,lng):
   # This is where you do all the heavy GeoJSON stuff.
   polygon, points = getServiceArea((lat,lng))
-  return polygon
+  return points
 
 if __name__ == '__main__':
     app.run()
