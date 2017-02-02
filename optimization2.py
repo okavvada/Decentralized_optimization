@@ -15,8 +15,8 @@ import Parameters as P
 def getServiceArea(queryPoint):
 	data_all = readBuildings('../GIS_data/building_all_null.csv')
 	
-	if len(data_all)>400:
-		k = 400
+	if len(data_all)>200:
+		k = 200
 	else:
 	    k = len(data_all)
 
@@ -79,7 +79,7 @@ def getServiceArea(queryPoint):
 		treatment_embodied = find_treatment_embodied_energy(building_population, totals['SUM_pop'],  ttype = False)
 		infrastructure = find_infrastructure_energy(building_population, totals['SUM_pop'], piping_distance)
 		total_energy = conveyance_energy + treatment_energy + infrastructure + treatment_embodied
-		log_energy.append((index, total_energy))
+		#log_energy.append((index, total_energy))
 
 		if total_energy < totals['total_energy']:
 			cluster_points.append(index)
@@ -94,7 +94,7 @@ def getServiceArea(queryPoint):
 		    
 
 	output_points = findNClosest(cluster_points, data)
-	sum_population = output_points['SUM_pop'].sum()
+	sum_population = int(output_points['SUM_pop'].sum())
 	num_houses = int(output_points['SUM_pop'].count())
 	coords = []
 	for index, row in output_points.iterrows():

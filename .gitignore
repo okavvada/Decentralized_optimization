@@ -3,10 +3,9 @@
 *.json
 *.geojson
 *.log
-*.html
 *.sublime-project
 *.sublime-workspace
 *.ipynb_checkpoints/
 *.xlsx
-maps/
+map/
 result_csv/

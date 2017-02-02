@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #img{
+      	position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%)
+		width: 10%;
+		height: 10%;
+      }
+
+    #img2{
+        position: absolute;
+        top: 35%;
+        left: 47%;
+        transform: translate(-50%, -50%)
+    width: 5%;
+    height: 5%;
+      }
+
+    </style>
+    <script type="text/javascript" src="/static/jquery.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="/static/all.js">
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+    async defer></script>
+    <img src="/static/images/page-loader.gif" id="img" style="display:none"/ >
+    <img src="/static/images/calculating3.png" id="img2" style="display:none"/ >
+  </body>
+</html>
