@@ -56,19 +56,16 @@ def distance(lat_lon1, latlon2):
     dist = vincenty(lat_lon1, latlon2).meters
     return dist
 
-
 def create_tree(X_lat_lon_to_check, query_point):
     tree = spatial.KDTree(X_lat_lon_to_check)
     dist, index = tree.query(query_point, k=len(X_lat_lon_to_check))
     return dist, index
-
 
 def populate_Graph(G, start, data):
     G.add_node(start)
     for destination in G.nodes():
         dist = vincenty(data.iloc[int(start)]['lat_lon'], data.iloc[int(destination)]['lat_lon']).meters
         G.add_edge(start, destination, weight=dist)
-
 
 def find_MST_distance(G):
     MST_edges = nx.minimum_spanning_edges(G, weight='weight')
@@ -77,54 +74,60 @@ def find_MST_distance(G):
     MST_distance = sum(list(map(lambda t: t[2].get('weight', 1), edgelist)))
     return MST_distance
 
-
 def ground_elevation(building_elevation, totals_elevation):
     min_elev = min(building_elevation,totals_elevation)
     max_elev = max(building_elevation,totals_elevation)
     elev_diff = max_elev-min_elev
     return elev_diff #m
 
-def ground_elevation_energy(building_elevation, totals_elevation):
-    elev_diff = ground_elevation(building_elevation, totals_elevation)
-    pump = elev_diff*P.water_weight/1000 #MJ/m3
-    return pump #MJ/m3
-
-def pump_energy_building(floors):
-    elev_diff = floors*3
-    pump = elev_diff*P.water_weight/1000 #MJ/m3
-    return pump #MJ/m3
-
-def calc_flow(building_pop, totals_pop):
+def calc_water_flow(building_pop, totals_pop):
     peop1 = building_pop
     peop2 = totals_pop
     flow_tot = (peop1+peop2)*P.water_demand #m3/day
     return flow_tot #m3/day
 
-def find_treatment_energy(building_pop, totals_pop):
-    flow = calc_flow(building_pop, totals_pop)
+def calc_wastewater_flow(building_pop, totals_pop):
+    peop1 = building_pop
+    peop2 = totals_pop
+    flow_tot = (peop1+peop2)*P.wastewater_demand #m3/day
+    return flow_tot #m3/day
+
+def ground_elevation_energy(building_elevation, totals_elevation, building_pop, totals_pop):
+    elev_diff = ground_elevation(building_elevation, totals_elevation)
+    flow_total = calc_water_flow(building_pop, totals_pop) #m3/day
+    pump = elev_diff*P.water_weight*P.pump_operation_time/(1000 * P.pump_efficiency * flow_total) #MJ/m3
+    return pump #MJ/m3
+
+def pump_energy_building(floors, building_pop):
+    elev_diff = floors*3
+    flow_building = calc_water_flow(building_pop, 0) #m3/day
+    pump = elev_diff*P.water_weight* P.pump_operation_time/(1000 * P.pump_efficiency * flow_building) #MJ/m3
+    return pump #MJ/m3
+
+
+def find_treatment_energy(building_pop, totals_pop, a, b):
+    flow = calc_wastewater_flow(building_pop, totals_pop)
     #Find embodied energy function
-    treat_energy = 9.5*(flow)**(-0.3)*3.6
+    treat_energy = a*(flow)**(b)*3.6
     return treat_energy
 
-def find_treatment_embodied_energy(building_pop, totals_pop,  ttype = False):
+def find_treatment_embodied_energy(building_pop, totals_pop, a, b, ttype = True):
     if ttype == False:
         treat_energy = 0
     else:
-        flow = calc_flow(building_pop, totals_pop)
-        #treat_energy = 9.5*(flow)**(-0.3)*3.6
-        treat_energy = 8*(flow)**(-0.1)*3.6
+        flow = calc_wastewater_flow(building_pop, totals_pop)
+        treat_energy = a*(flow)**(b)*3.6
     return treat_energy
 
-def find_conveyance_energy(building_elevation, totals_elevation, floors):
-    pump = ground_elevation_energy(building_elevation, totals_elevation)
-    pump_building = pump_energy_building(floors)
+def find_conveyance_energy(building_elevation, totals_elevation, floors, building_pop, totals_pop):
+    pump = ground_elevation_energy(building_elevation, totals_elevation, building_pop, totals_pop)
+    pump_building = pump_energy_building(floors, building_pop)
     energy = pump + pump_building
     return energy
 
 def find_infrastructure_energy(building_pop, totals_pop, piping):
-    flow = calc_flow(building_pop, totals_pop) #m3/day
-    flow_s = flow/(24*3600)
-    pipe = piping*P.piping_embodied/P.pipe_lifetime #MJ/m
+    flow = calc_water_flow(building_pop, totals_pop) #m3/day
+    pipe = piping*P.piping_embodied/P.pipe_lifetime #MJ
     pipe_m3 = pipe/(flow*365) #MJ/m3
     return pipe_m3
 

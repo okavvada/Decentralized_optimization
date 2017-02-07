@@ -12,7 +12,7 @@ from geojson import Feature, Point, MultiPoint, FeatureCollection
 from functions import *
 import Parameters as P
 
-def getServiceArea(queryPoint):
+def getServiceArea(queryPoint, a, b, c, d):
 	data_all = readBuildings('../GIS_data/building_all_null.csv')
 	
 	if len(data_all)>200:
@@ -72,11 +72,11 @@ def getServiceArea(queryPoint):
 		building_sqft = data.iloc[int(index)]['Area_m2']
 		building_elevation = data.iloc[int(index)]['ELEV_treat']
 		building_population = data.iloc[int(index)]['SUM_pop']
-		piping_distance = MST_distance + building_sqft*P.in_builing_piping_sf
+		piping_distance = 2*MST_distance + building_sqft*P.in_builing_piping_sf
 
-		conveyance_energy = find_conveyance_energy(building_elevation, totals['ELEV_treat'], building_floors)
-		treatment_energy = find_treatment_energy(building_population, totals['SUM_pop'])
-		treatment_embodied = find_treatment_embodied_energy(building_population, totals['SUM_pop'],  ttype = False)
+		conveyance_energy = find_conveyance_energy(building_elevation, totals['ELEV_treat'], building_floors, building_population, totals['SUM_pop'])
+		treatment_energy = find_treatment_energy(building_population, totals['SUM_pop'], a, b)
+		treatment_embodied = find_treatment_embodied_energy(building_population, totals['SUM_pop'], c, d, ttype = False)
 		infrastructure = find_infrastructure_energy(building_population, totals['SUM_pop'], piping_distance)
 		total_energy = conveyance_energy + treatment_energy + infrastructure + treatment_embodied
 		#log_energy.append((index, total_energy))
