@@ -23,34 +23,34 @@ def findNClosest(index, dataframe):
 	return data
 
 
-def hierarchical_cluster(X_lat_lon, Z):
-    clusters = {}
-    i = 1
-    for item in Z:
-        if (item[0]<len(X_lat_lon)) and (item[1]<len(X_lat_lon)):
-            clusters.update({i:[int(item[0]),int(item[1])]})
-            i += 1
-        elif (item[0]<len(X_lat_lon)) and (item[1]>=len(X_lat_lon)):
-            ind_new = int(item[1]-len(X_lat_lon)+1)
-            old = clusters[ind_new]
-            new = old + [int(item[0])]
-            clusters.update({i:(new)})
-            i += 1
-        elif (item[0]>=len(X_lat_lon)) and (item[1]<len(X_lat_lon)):
-            ind_new = int(item[0]-len(X_lat_lon)+1)
-            old = clusters[ind_new]
-            new=old + [int(item[1])]
-            clusters.update({i:new})
-            i += 1 
-        elif (item[0]>=len(X_lat_lon)) and (item[1]>=len(X_lat_lon)):
-            ind_new_1 = int(item[0]-len(X_lat_lon)+1)
-            ind_new_2 = int(item[1]-len(X_lat_lon)+1)
-            old_1 = clusters[ind_new_1]
-            old_2 = clusters[ind_new_2]
-            new = old_1 + old_2
-            clusters.update({i:new})
-            i += 1 
-    return clusters
+# def hierarchical_cluster(X_lat_lon, Z):
+#     clusters = {}
+#     i = 1
+#     for item in Z:
+#         if (item[0]<len(X_lat_lon)) and (item[1]<len(X_lat_lon)):
+#             clusters.update({i:[int(item[0]),int(item[1])]})
+#             i += 1
+#         elif (item[0]<len(X_lat_lon)) and (item[1]>=len(X_lat_lon)):
+#             ind_new = int(item[1]-len(X_lat_lon)+1)
+#             old = clusters[ind_new]
+#             new = old + [int(item[0])]
+#             clusters.update({i:(new)})
+#             i += 1
+#         elif (item[0]>=len(X_lat_lon)) and (item[1]<len(X_lat_lon)):
+#             ind_new = int(item[0]-len(X_lat_lon)+1)
+#             old = clusters[ind_new]
+#             new=old + [int(item[1])]
+#             clusters.update({i:new})
+#             i += 1 
+#         elif (item[0]>=len(X_lat_lon)) and (item[1]>=len(X_lat_lon)):
+#             ind_new_1 = int(item[0]-len(X_lat_lon)+1)
+#             ind_new_2 = int(item[1]-len(X_lat_lon)+1)
+#             old_1 = clusters[ind_new_1]
+#             old_2 = clusters[ind_new_2]
+#             new = old_1 + old_2
+#             clusters.update({i:new})
+#             i += 1 
+#     return clusters
 
 def distance(lat_lon1, latlon2):
     dist = vincenty(lat_lon1, latlon2).meters
