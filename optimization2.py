@@ -6,6 +6,7 @@ import networkx as nx
 import geopandas as gpd
 import json
 import csv
+import collections
 from geojson import Feature, Point, MultiPoint, FeatureCollection
 #from shapely.geometry import Point
 
@@ -39,6 +40,12 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 	building_sqft = data.loc[int(index_0)]['Area_m2']
 	MIN_ELEV = data.loc[int(index_0)]['ELEV_treat']
 	inbuilding_floors = data.loc[int(index_0)]['num_floor']
+	mydeque = collections.deque(maxlen=50)
+	data['energy'] = 0
+	data['accept'] = 'no'	
+
+	for i in range(50):
+		mydeque.append(False)
 
 	#initial parameters
 	total_dist = building_sqft*P.in_builing_piping_sf
@@ -49,12 +56,14 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 
 	cluster_points = []
 	not_selected = []
+	seen = []
 	log_energy_array = []
 	accept = []
 	cluster_points.append(index_0)
 	treatment_log = []
 	conveyance_log = []
 	population_log = []
+	checks = []
 	X_lat_lon_to_check = []
 
 	totals = {'num_buildings':num_buildings, 'SUM_pop':SUM_pop ,'ELEV_treat':MIN_ELEV, 'total_dist':total_dist, 'inbuilding_pumping':inbuilding_pumping, 'total_energy':total_energy }
@@ -80,7 +89,11 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 		infrastructure = find_infrastructure_energy(building_population, totals['SUM_pop'], piping_distance)
 		total_energy = conveyance_energy + treatment_energy + infrastructure + treatment_embodied
 
+		seen.append(index)
+
 		if total_energy < totals['total_energy']:
+			arg = False
+			acc = 'yes'
 			cluster_points.append(index)
 			totals['num_buildings'] += 1
 			totals['SUM_pop'] = totals['SUM_pop'] + data.iloc[int(index)]['SUM_pop']
@@ -90,20 +103,32 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 			accept.append('yes')
 
 		else:
+			arg = True
+			acc = 'no'
 			G.remove_node(int(index))
 			not_selected.append(int(index))
 			accept.append('no')
-		log_energy_array.append(total_energy)
 
-	data['energy'] = log_energy_array
-	data['accept'] = accept	    
+		data.set_value(index,'energy',total_energy)
+		data.set_value(index,'accept',acc)
+
+		log_energy_array.append(total_energy)
+		mydeque.append(arg)
+
+		if all(mydeque):
+			break
+
+	#data['energy'] = log_energy_array
+	#data['accept'] = accept	    
 
 	output_points = findNClosest(cluster_points, data)
 	not_output_points = findNClosest(not_selected, data) 
+	seen_points = findNClosest(seen, data)
 
 	output_points.to_csv('../GIS_data/test_results/output_points.csv')
 	data.to_csv('../GIS_data/test_results/all_points.csv')
 	not_output_points.to_csv('../GIS_data/test_results/not_output_points.csv')
+	seen_points.to_csv('../GIS_data/test_results/seen_points.csv')
 
 	sum_population = int(output_points['SUM_pop'].sum())
 	num_houses = int(output_points['SUM_pop'].count())
