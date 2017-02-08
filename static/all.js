@@ -18,6 +18,7 @@ function initMap() {
     });
 }
 
+
 var image = {
         url: '/static/images/dot.png', // image is 512 x 512
         scaledSize: new google.maps.Size(10, 10),     
@@ -32,20 +33,49 @@ var image = {
 			lat: event.latLng.lat(),
 			lng: event.latLng.lng()
 		}, function(data) {
-			map.data.setStyle({
-			  icon: image
-			});
-			map.data.addGeoJson(data); 
-			var html = "<ul><li>Houses: " + data.properties.houses + "</li><li>Population: " + data.properties.population + "</li></ul>";
+			map.data.addGeoJson(data);
+
+			map.data.setStyle(function(feature) {
+				var color = '#000';
+				var myscale =  4;
+			          if (feature.getProperty('accept') == 'yes') {
+			            color = '#f00';
+			            myscale =  8;
+			          }
+			          return ({
+			            icon: { 
+			  	path: google.maps.SymbolPath.CIRCLE, 
+			  	strokeWeight: 0.5,
+            	strokeColor: color,
+			  	scale: myscale,
+			  	fillColor: color,
+			  	fillOpacity: 0.5
+			  }
+			        });
+			      });
+
+			//map.data.addGeoJson(data);
+			
+			//var html = "<ul><li>Houses: " + data.properties.houses + "</li><li>Population: " + data.properties.population + "</li><li>index: " + data.properties.index + "</li></ul>";
 			var infowindow = new google.maps.InfoWindow();
+
 			$('#img').hide();
 			$('#img2').hide();
-			var contentString = '<div style="width: 100%; padding-left:1px; color: #000;background: #000;">'+html+'</div>'
+			//var contentString = html
 
   			// When the user clicks, open an infowindow
 			map.data.addListener('mouseover', function(event) {
+				index = event.feature.getProperty("index");
+				floors = event.feature.getProperty("num_floor");
+				sum_pop = event.feature.getProperty("SUM_pop");
+				total_pop = event.feature.getProperty("population");
+				total_buildings = event.feature.getProperty("houses");
+				energy = event.feature.getProperty("energy");
+				accept = event.feature.getProperty("accept");
+				var html = "<ul><b>Total Population: " + total_pop + "<br />Total Buildings: " + total_buildings + "</b><br /><li>index: " + index + "</li><li>floors: " + floors + "</li><li>Building_Pop: " + sum_pop + "</li></ul>";
+				var contentString = html
       			infowindow.setContent(contentString);
-      			infowindow.setPosition(place_lat_lon);
+      			infowindow.setPosition(event.latLng);
       			//infowindow.setOptions({pixelOffset: new google.maps.Size(10,10)});
       			infowindow.setOptions({disableAutoPan: true});
       			infowindow.open(map);
