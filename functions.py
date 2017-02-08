@@ -95,28 +95,29 @@ def calc_wastewater_flow(building_pop, totals_pop):
 def ground_elevation_energy(building_elevation, totals_elevation, building_pop, totals_pop):
     elev_diff = ground_elevation(building_elevation, totals_elevation)
     flow_total = calc_water_flow(building_pop, totals_pop) #m3/day
-    pump = elev_diff*P.water_weight*P.pump_operation_time/(1000 * P.pump_efficiency * flow_total) #MJ/m3
+    pump = elev_diff*P.water_weight*3.6/(3600*P.pump_efficiency) #MJ/m3
     return pump #MJ/m3
 
 def pump_energy_building(floors, building_pop):
     elev_diff = floors*3
     flow_building = calc_water_flow(building_pop, 0) #m3/day
-    pump = elev_diff*P.water_weight* P.pump_operation_time/(1000 * P.pump_efficiency * flow_building) #MJ/m3
+    pump = elev_diff*P.water_weight*3.6/(3600*P.pump_efficiency) #MJ/m3
     return pump #MJ/m3
 
 
-def find_treatment_energy(building_pop, totals_pop, a, b):
+def find_treatment_energy(building_pop, totals_pop, a, b,c,d):
     flow = calc_wastewater_flow(building_pop, totals_pop)
     #Find embodied energy function
-    treat_energy = a*(flow)**(b)*3.6
+    treat_energy = (a*(flow)**(b)+c*flow+d)*3.6
+    #treat_energy = -0.047*(flow)+(2)
     return treat_energy
 
-def find_treatment_embodied_energy(building_pop, totals_pop, a, b, ttype = True):
+def find_treatment_embodied_energy(building_pop, totals_pop, a, b, c, d, ttype=False):
     if ttype == False:
         treat_energy = 0
     else:
         flow = calc_wastewater_flow(building_pop, totals_pop)
-        treat_energy = a*(flow)**(b)*3.6
+        treat_energy = (a*(flow)**(b)+c*flow+d)*3.6
     return treat_energy
 
 def find_conveyance_energy(building_elevation, totals_elevation, floors, building_pop, totals_pop):
@@ -143,3 +144,16 @@ def getPolygon(dataframe):
 	polygon_coords_array = [polygon_coords + [polygon_coords[0]]]
 	polygon = Polygon(polygon_coords_array)
 	return polygon
+
+def df_to_geojson(df, properties, lat='y_lat', lon='x_lon'):
+    geojson = {'type':'FeatureCollection', 'features':[]}
+    for _, row in df.iterrows():
+        feature = {'type':'Feature',
+                   'properties':{},
+                   'geometry':{'type':'Point',
+                               'coordinates':[]}}
+        feature['geometry']['coordinates'] = [row[lon],row[lat]]
+        for prop in properties:
+            feature['properties'][prop] = row[prop]
+        geojson['features'].append(feature)
+    return geojson
