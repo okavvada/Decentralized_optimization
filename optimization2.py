@@ -67,8 +67,8 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 	X_lat_lon_to_check = []
 
 	totals = {'num_buildings':num_buildings, 'SUM_pop':SUM_pop ,'ELEV_treat':MIN_ELEV, 'total_dist':total_dist, 'inbuilding_pumping':inbuilding_pumping, 'total_energy':total_energy }
-	accept.append('yes')
-	log_energy_array.append(total_energy)
+	#accept.append('yes')
+	#log_energy_array.append(total_energy)
 
 	G = nx.Graph()
 	G.add_node(index_0)
@@ -112,7 +112,7 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 		data.set_value(index,'energy',total_energy)
 		data.set_value(index,'accept',acc)
 
-		log_energy_array.append(total_energy)
+		#log_energy_array.append(total_energy)
 		mydeque.append(arg)
 
 		if all(mydeque):
