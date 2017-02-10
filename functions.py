@@ -11,16 +11,19 @@ import Parameters as P
 
 def readBuildings(path):
 	data_all = pd.read_csv(path)
-	data_all['lat_lon'] = data_all.apply(lambda row: (row['y_lat'], row['x_lon']), axis=1)
 	return data_all
 
 
-def findNClosest(index, dataframe):
-	data = pd.DataFrame()
-	for i in index:
-	    select_row = dataframe.iloc[[i]]
-	    data = data.append(select_row)
-	return data
+# def findN_DataFrame(index, dataframe):
+# 	data = pd.DataFrame()
+# 	for i in index:
+# 	    select_row = dataframe.iloc[[i]]
+# 	    data = data.append(select_row)
+# 	return data
+
+def findN_DataFrame(index, dataframe):
+    data = dataframe.iloc[index,:]
+    return data
 
 
 # def hierarchical_cluster(X_lat_lon, Z):
@@ -61,17 +64,32 @@ def create_tree(X_lat_lon_to_check, query_point):
     dist, index = tree.query(query_point, k=len(X_lat_lon_to_check))
     return dist, index
 
+# def populate_Graph(G, start, data):
+#     G.add_node(start)
+#     for destination in G.nodes():
+#         dist = vincenty(data.iloc[int(start)]['lat_lon'], data.iloc[int(destination)]['lat_lon']).meters
+#         G.add_edge(start, destination, weight=dist)
+
 def populate_Graph(G, start, data):
-    G.add_node(start)
+    G.add_node(start, pos=data.iloc[int(start)]['lat_lon'])
+    position=nx.get_node_attributes(G,'pos')
     for destination in G.nodes():
-        dist = vincenty(data.iloc[int(start)]['lat_lon'], data.iloc[int(destination)]['lat_lon']).meters
+        dist = vincenty(position[start], position[destination]).meters
         G.add_edge(start, destination, weight=dist)
 
-def find_MST_distance(G):
-    MST_edges = nx.minimum_spanning_edges(G, weight='weight')
-    edgelist=list(MST_edges)
-    MST_distance = 0
-    MST_distance = sum(list(map(lambda t: t[2].get('weight', 1), edgelist)))
+# def find_MST_distance(G, start, previous_dist):
+#     MST_edges = nx.minimum_spanning_edges(G, weight='weight')
+#     edgelist=list(MST_edges)
+#     MST_distance = 0
+#     MST_distance = sum(list(map(lambda t: t[2].get('weight', 1), edgelist)))
+#     return MST_distance
+
+def find_MST_distance(G, start, previous_dist):
+    distance = 9999999999
+    for i in G.edge[start]:
+        if i!=start and G.edge[start][i].get('weight', 1)<distance:
+            distance = G.edge[start][i].get('weight', 1)
+    MST_distance = previous_dist + distance
     return MST_distance
 
 def ground_elevation(building_elevation, totals_elevation):

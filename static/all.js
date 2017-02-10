@@ -14,6 +14,7 @@ function initMap() {
 	function placeMarker(location) {
     var marker = new google.maps.Marker({
         position: location, 
+        icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
         map: map
     });
 }
@@ -70,7 +71,7 @@ var image = {
 				sum_pop = event.feature.getProperty("SUM_pop");
 				total_pop = event.feature.getProperty("population");
 				total_buildings = event.feature.getProperty("houses");
-				energy = event.feature.getProperty("energy");
+				//energy = event.feature.getProperty("energy");
 				accept = event.feature.getProperty("accept");
 				var html = "<ul><b>Total Population: " + total_pop + "<br />Total Buildings: " + total_buildings + "</b><br /><li>index: " + index + "</li><li>floors: " + floors + "</li><li>Building_Pop: " + sum_pop + "</li></ul>";
 				var contentString = html
