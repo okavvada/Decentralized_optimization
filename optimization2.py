@@ -54,7 +54,7 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 	#initialize
 	num_buildings = 1
 	SUM_pop = data.iloc[int(index_0)]['SUM_pop']
-	building_sqft = data.loc[int(index_0)]['Area_m2']
+	building_sqft = data.iloc[int(index_0)]['Area_m2']
 	MIN_ELEV = data.iloc[int(index_0)]['ELEV_treat']
 	inbuilding_floors = data.iloc[int(index_0)]['num_floor']
 	mydeque = collections.deque(maxlen=50)
