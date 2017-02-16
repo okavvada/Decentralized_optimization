@@ -16,7 +16,7 @@ import time
 from functions import *
 import Parameters as P
 
-data_all = readBuildings('../GIS_data/building_res_emp_elev_2.csv')
+data_all = readBuildings('../GIS_data/combined_buildings_2.csv')
 
 if len(data_all)>500:
 	k = 500
