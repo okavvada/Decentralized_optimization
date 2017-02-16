@@ -57,11 +57,12 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 	building_sqft = data.iloc[int(index_0)]['Area_m2']
 	MIN_ELEV = data.iloc[int(index_0)]['ELEV_treat']
 	inbuilding_floors = data.iloc[int(index_0)]['num_floor']
-	mydeque = collections.deque(maxlen=50)
+	deque_length = 150
+	mydeque = collections.deque(maxlen=deque_length)
 	data['energy'] = 0
-	data['accept'] = 'no'	
+	data['accept'] = 'start'	
 
-	for i in range(100):
+	for i in range(deque_length):
 		mydeque.append(False)
 
 	elapsed_dataframe = time.time() - t_dataframe

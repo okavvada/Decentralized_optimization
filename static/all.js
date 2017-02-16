@@ -37,11 +37,15 @@ var image = {
 			map.data.addGeoJson(data);
 
 			map.data.setStyle(function(feature) {
-				var color = '#000';
+				var color = '#6f786a';
 				var myscale =  4;
 			          if (feature.getProperty('accept') == 'yes') {
 			            color = '#f00';
 			            myscale =  8;
+			          }
+			          else if (feature.getProperty('accept') == 'no') {
+			            color = '#000';
+			            myscale =  7;
 			          }
 			          return ({
 			            icon: { 
@@ -50,7 +54,7 @@ var image = {
             	strokeColor: color,
 			  	scale: myscale,
 			  	fillColor: color,
-			  	fillOpacity: 0.5
+			  	fillOpacity: 0.6
 			  }
 			        });
 			      });
@@ -71,7 +75,6 @@ var image = {
 				sum_pop = event.feature.getProperty("SUM_pop");
 				total_pop = event.feature.getProperty("population");
 				total_buildings = event.feature.getProperty("houses");
-				//energy = event.feature.getProperty("energy");
 				accept = event.feature.getProperty("accept");
 				var html = "<ul><b>Total Population: " + total_pop + "<br />Total Buildings: " + total_buildings + "</b><br /><li>index: " + index + "</li><li>floors: " + floors + "</li><li>Building_Pop: " + sum_pop + "</li></ul>";
 				var contentString = html
@@ -87,4 +90,34 @@ var image = {
 
 		}) 
 	}); 
-}
+
+	var icons = {
+        redDot: {
+            name: 'connected building',
+            icon: '/static/images/reddot.png'
+        },
+        greyDot: {
+            name: 'unconnected building',
+            icon: '/static/images/blackdot.png'
+        },
+        blackDot: {
+            name: 'unassessed building',
+            icon: '/static/images/greydot.png'
+        }
+        };
+
+	var legend = document.getElementById('legend');
+	legend.style.fontSize = "14px";
+        for (var key in icons) {
+          var type = icons[key];
+          var name = type.name;
+          var icon = type.icon;
+          var div = document.createElement('div');
+          ///div.innerHTML = '<img src="' + icon +  '"'+  'id="leg_item"' + '> ' + name;
+          div.innerHTML = '<img src="' + icon + '"> ' + name;
+          legend.appendChild(div);
+        }
+
+
+        map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+      }
