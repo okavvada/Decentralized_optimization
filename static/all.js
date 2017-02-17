@@ -19,9 +19,19 @@ function initMap() {
     });
 }
 
+	function get_pop(feature){
+		var pop = feature.getProperty('population');
+	  	return pop
+	};
+
+	function get_houses(feature){
+		var house = feature.getProperty('houses');
+	  	return house
+	};
+
 
 var image = {
-        url: '/static/images/dot.png', // image is 512 x 512
+        url: '/static/images/dot.png',
         scaledSize: new google.maps.Size(10, 10),     
     }; 
 
@@ -58,35 +68,32 @@ var image = {
 			  }
 			        });
 			      });
-
-			//map.data.addGeoJson(data);
 			
 			//var html = "<ul><li>Houses: " + data.properties.houses + "</li><li>Population: " + data.properties.population + "</li><li>index: " + data.properties.index + "</li></ul>";
 			var infowindow = new google.maps.InfoWindow();
 
 			$('#img').hide();
 			$('#img2').hide();
-			//var contentString = html
 
   			// When the user clicks, open an infowindow
 			map.data.addListener('mouseover', function(event) {
 				index = event.feature.getProperty("index");
 				floors = event.feature.getProperty("num_floor");
-				sum_pop = event.feature.getProperty("SUM_pop");
+				sum_pop = Math.ceil(event.feature.getProperty("SUM_pop"));
 				total_pop = event.feature.getProperty("population");
 				total_buildings = event.feature.getProperty("houses");
 				accept = event.feature.getProperty("accept");
-				var html = "<ul><b>Total Population: " + total_pop + "<br />Total Buildings: " + total_buildings + "</b><br /><li>index: " + index + "</li><li>floors: " + floors + "</li><li>Building_Pop: " + sum_pop + "</li></ul>";
-				var contentString = html
-      			infowindow.setContent(contentString);
+				var html = "<ul><b><font size="+ 3 + ">Total Population: " + total_pop + "<br />Total Buildings: " + total_buildings + "</font></b></li><li>floors: " + floors + "</li><li>Building_Pop: " + sum_pop + "</li></ul>";
+      			infowindow.setContent(html);
       			infowindow.setPosition(event.latLng);
       			//infowindow.setOptions({pixelOffset: new google.maps.Size(10,10)});
       			infowindow.setOptions({disableAutoPan: true});
       			infowindow.open(map);
   			});
+
   			map.data.addListener('mouseout', function(event) {
   				infowindow.close();
-  			}) 
+  			})
 
 		}) 
 	}); 
@@ -106,18 +113,16 @@ var image = {
         }
         };
 
-	var legend = document.getElementById('legend');
-	legend.style.fontSize = "14px";
-        for (var key in icons) {
-          var type = icons[key];
-          var name = type.name;
-          var icon = type.icon;
-          var div = document.createElement('div');
-          ///div.innerHTML = '<img src="' + icon +  '"'+  'id="leg_item"' + '> ' + name;
-          div.innerHTML = '<img src="' + icon + '"> ' + name;
-          legend.appendChild(div);
-        }
-
-
+		var legend = document.getElementById('legend');
+		legend.style.fontSize = "14px";
+	    for (var key in icons) {
+	      var type = icons[key];
+	      var name = type.name;
+	      var icon = type.icon;
+	      var div = document.createElement('div');
+	      div.innerHTML = '<img src="' + icon + '"> ' + name;
+	      legend.appendChild(div);
+    }
         map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+
       }
