@@ -150,18 +150,6 @@ def find_infrastructure_energy(building_pop, totals_pop, piping):
     pipe_m3 = pipe/(flow*365) #MJ/m3
     return pipe_m3
 
-def getPolygon(dataframe):
-	lat_lon_array = list(dataframe['lat_lon'])
-	hull = ConvexHull(lat_lon_array)
-	polygon_coords=[]
-	for simplex in hull.vertices:
-	    x= lat_lon_array[simplex][1]
-	    y = lat_lon_array[simplex][0]
-	    coords = (x,y)
-	    polygon_coords.append(coords)
-	polygon_coords_array = [polygon_coords + [polygon_coords[0]]]
-	polygon = Polygon(polygon_coords_array)
-	return polygon
 
 def df_to_geojson(df, properties, lat='y_lat', lon='x_lon'):
     geojson = {'type':'FeatureCollection', 'features':[]}

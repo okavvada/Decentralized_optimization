@@ -187,8 +187,6 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 	data['population'] = sum_population
 	data['houses'] = num_houses	
 
-	#polygon = getPolygon(output_points)
-	#polygon_properties = Feature(geometry=polygon, properties={"population": sum_population,"houses": num_houses})
 	polygon_properties= []
 
 	cols = ['index', 'SUM_pop', 'energy', 'accept', 'num_floor', 'population', 'houses']
@@ -208,9 +206,6 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 	print("calc time %s "%calc_time, file=stderr)
 	print("out time %s "%elapsed_out, file=stderr)
 	print("loop time %s "%elapsed2, file=stderr)
-	#point_properties = Feature(geometry=points, properties={"population": sum_population,"houses": num_houses})
-	#all_data = [points, polygon]
-	#collection = FeatureCollection(features = all_data, properties={"population": sum_population,"houses": num_houses})
 
 	#with open('../GIS_data/polygon_.geojson', 'w') as outfile: 
 		#json.dump(polygon, outfile)
