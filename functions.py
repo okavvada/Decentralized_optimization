@@ -98,54 +98,54 @@ def ground_elevation(building_elevation, totals_elevation):
     elev_diff = max_elev-min_elev
     return elev_diff #m
 
-def calc_water_flow(building_pop, totals_pop):
-    peop1 = building_pop
-    peop2 = totals_pop
-    flow_tot = (peop1+peop2)*P.water_demand #m3/day
+def calc_water_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial):
+    peop_residential = building_pop_residential + totals_pop_residential
+    peop_commercial = building_pop_commercial + totals_pop_commercial
+    flow_tot = peop_residential*P.npr_water_demand_residential + peop_commercial*P.npr_water_demand_commercial #m3/day
     return flow_tot #m3/day
 
-def calc_wastewater_flow(building_pop, totals_pop):
-    peop1 = building_pop
-    peop2 = totals_pop
-    flow_tot = (peop1+peop2)*P.wastewater_demand #m3/day
+def calc_wastewater_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial):
+    peop_residential = building_pop_residential+totals_pop_residential
+    peop_commercial = building_pop_commercial + totals_pop_commercial
+    flow_tot = peop_residential*P.wastewater_demand_residential + peop_commercial*P.wastewater_demand_commercial #m3/day
     return flow_tot #m3/day
 
-def ground_elevation_energy(building_elevation, totals_elevation, building_pop, totals_pop):
+def ground_elevation_energy(building_elevation, totals_elevation, building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial):
     elev_diff = ground_elevation(building_elevation, totals_elevation)
-    flow_total = calc_water_flow(building_pop, totals_pop) #m3/day
+    flow_total = calc_water_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial) #m3/day
     pump = elev_diff*P.water_weight*3.6/(3600*P.pump_efficiency) #MJ/m3
     return pump #MJ/m3
 
-def pump_energy_building(floors, building_pop):
+def pump_energy_building(floors, building_pop_residential, building_pop_commercial):
     elev_diff = floors*3
-    flow_building = calc_water_flow(building_pop, 0) #m3/day
+    flow_building = calc_water_flow(building_pop_residential, building_pop_commercial, 0, 0) #m3/day
     pump = elev_diff*P.water_weight*3.6/(3600*P.pump_efficiency) #MJ/m3
     return pump #MJ/m3
 
 
-def find_treatment_energy(building_pop, totals_pop, a, b,c,d):
-    flow = calc_wastewater_flow(building_pop, totals_pop)
+def find_treatment_energy(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b,c,d):
+    flow = calc_wastewater_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial)
     #Find embodied energy function
     treat_energy = (a*(flow)**(b)+c*flow+d)*3.6
     #treat_energy = -0.047*(flow)+(2)
     return treat_energy
 
-def find_treatment_embodied_energy(building_pop, totals_pop, a, b, c, d, ttype=False):
+def find_treatment_embodied_energy(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d, ttype=False):
     if ttype == False:
         treat_energy = 0
     else:
-        flow = calc_wastewater_flow(building_pop, totals_pop)
+        flow = calc_wastewater_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial)
         treat_energy = (a*(flow)**(b)+c*flow+d)*3.6
     return treat_energy
 
-def find_conveyance_energy(building_elevation, totals_elevation, floors, building_pop, totals_pop):
-    pump = ground_elevation_energy(building_elevation, totals_elevation, building_pop, totals_pop)
-    pump_building = pump_energy_building(floors, building_pop)
+def find_conveyance_energy(building_elevation, totals_elevation, floors, building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial):
+    pump = ground_elevation_energy(building_elevation, totals_elevation, building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial)
+    pump_building = pump_energy_building(floors, building_pop_residential, building_pop_commercial)
     energy = pump + pump_building
     return energy
 
-def find_infrastructure_energy(building_pop, totals_pop, piping):
-    flow = calc_water_flow(building_pop, totals_pop) #m3/day
+def find_infrastructure_energy(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, piping):
+    flow = calc_water_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial) #m3/day
     pipe = piping*P.piping_embodied/P.pipe_lifetime #MJ
     pipe_m3 = pipe/(flow*365) #MJ/m3
     return pipe_m3

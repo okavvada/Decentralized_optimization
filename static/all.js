@@ -79,11 +79,11 @@ var image = {
 			map.data.addListener('mouseover', function(event) {
 				index = event.feature.getProperty("index");
 				floors = event.feature.getProperty("num_floor");
-				sum_pop = Math.ceil(event.feature.getProperty("SUM_pop"));
+				sum_pop_residential = Math.ceil(event.feature.getProperty("SUM_pop_residential"));
+				sum_pop_commercial = Math.ceil(event.feature.getProperty("SUM_pop_commercial"));
 				total_pop = event.feature.getProperty("population");
 				total_buildings = event.feature.getProperty("houses");
-				accept = event.feature.getProperty("accept");
-				var html = "<ul><b><font size="+ 3 + ">Total Population: " + total_pop + "<br />Total Buildings: " + total_buildings + "</font></b></li><li>floors: " + floors + "</li><li>Building_Pop: " + sum_pop + "</li></ul>";
+				var html = "<ul><b><font size="+ 3 + ">Total Population: " + total_pop + "<br />Total Buildings: " + total_buildings + "</font></b></li><li>floors: " + floors + "</li><li>Residential_Pop: " + sum_pop_residential + "</li><li>Commercial_Pop: " + sum_pop_commercial + "</li></ul>";
       			infowindow.setContent(html);
       			infowindow.setPosition(event.latLng);
       			//infowindow.setOptions({pixelOffset: new google.maps.Size(10,10)});
