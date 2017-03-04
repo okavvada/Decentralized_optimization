@@ -27,7 +27,7 @@ X_lat_lon = list(zip(data_all['y_lat'],data_all['x_lon']))
 
 tree = spatial.KDTree(X_lat_lon)
 
-def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
+def getServiceArea(queryPoint, path, a, b, c, d, e, f, g, h):
 	t2 = time.time()
 
 	begin_time = time.time() - t2
@@ -209,7 +209,9 @@ def getServiceArea(queryPoint, a, b, c, d, e, f, g, h):
 	print("out time %s "%elapsed_out, file=stderr)
 	print("loop time %s "%elapsed2, file=stderr)
 
-	#with open('../GIS_data/polygon_.geojson', 'w') as outfile: 
-		#json.dump(polygon, outfile)
+	with open(path,'a') as f:
+	    writer=csv.writer(f)
+	    writer.writerow([])
+	    writer.writerow([queryPoint,sum_population])
 
 	return polygon_properties, point_properties

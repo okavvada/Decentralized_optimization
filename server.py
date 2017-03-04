@@ -20,12 +20,13 @@ def root():
 def lat_lng():
   lat = float(request.args.get('lat'))
   lng = float(request.args.get('lng'))
+  path = 'document.csv'
 
-  return flask.jsonify(getMyGeoJSON(lat = lat, lng = lng))
+  return flask.jsonify(getMyGeoJSON(lat = lat, lng = lng, path = path))
 
-def getMyGeoJSON(lat,lng):
+def getMyGeoJSON(lat,lng, path):
   # This is where you do all the heavy GeoJSON stuff.
-  polygon, points = getServiceArea((lat,lng), 9.5, -0.3, 0, 0, 8, -0.1, 0, 0)
+  polygon, points = getServiceArea((lat,lng), path, 9.5, -0.3, 0, 0, 8, -0.1, 0, 0)
   return points
 
 if __name__ == '__main__':
