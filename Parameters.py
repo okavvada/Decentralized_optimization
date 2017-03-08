@@ -1,4 +1,5 @@
 piping_embodied = 90 #MJ/m (diameter = 100 mm)
+piping_cost = 625 # $/m ###CHECK
 pipe_lifetime = 25 #years
 water_weight = 9.8 #KN/m3
 wastewater_demand_residential = 0.185 #m3/person-day http://www.sfwater.org/modules/showdocument.aspx?documentid=6543
@@ -9,3 +10,4 @@ npr_water_demand_residential =  wastewater_demand_residential*npr_percent_reside
 npr_water_demand_commercial = wastewater_demand_commercial*npr_percent_commercial #m3/person-day
 pump_efficiency = 0.45
 in_builing_piping_sf = 0.06 #m/m2 #Hasik LCA building
+electricity_cost = 0.12 #$/kWh EIA

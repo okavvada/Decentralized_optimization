@@ -128,7 +128,7 @@ def find_treatment_energy(building_pop_residential, building_pop_commercial,  to
     #Find embodied energy function
     treat_energy = (a*(flow)**(b)+c*flow+d)*3.6
     #treat_energy = -0.047*(flow)+(2)
-    return treat_energy
+    return treat_energy 
 
 def find_treatment_embodied_energy(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d, ttype=False):
     if ttype == False:
@@ -149,6 +149,33 @@ def find_infrastructure_energy(building_pop_residential, building_pop_commercial
     pipe = piping*P.piping_embodied/P.pipe_lifetime #MJ
     pipe_m3 = pipe/(flow*365) #MJ/m3
     return pipe_m3
+
+
+def pump_cost_building(floors, building_pop_residential, building_pop_commercial):
+    energy = pump_energy_building(floors, building_pop_residential, building_pop_commercial) #MJ/m3
+    cost = energy/3.6*P.electricity_cost #$/m3
+    return cost
+
+def find_treatment_cost(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d):
+    treat_cost = find_treatment_energy(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d)/3.6
+    return treat_cost
+
+
+def find_treatment_embodied_cost(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d, ttype=False):
+    treat_capital_cost = find_treatment_embodied_energy(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d, ttype=False)/3.6
+    return treat_capital_cost
+
+def find_infrastructure_cost(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, piping):
+    flow = calc_water_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial) #m3/day
+    pipe = piping*P.piping_cost/P.pipe_lifetime #$
+    pipe_m3 = pipe/(flow*365) #$/m3
+    return pipe_m3
+
+
+def find_conveyance_cost(building_elevation, totals_elevation, floors, building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial):
+    pump_energy = find_conveyance_energy(building_elevation, totals_elevation, floors, building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial)
+    pumping_cost = pump_energy/3.6*P.electricity_cost #$/m3
+    return pumping_cost
 
 
 def df_to_geojson(df, properties, lat='y_lat', lon='x_lon'):

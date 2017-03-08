@@ -75,7 +75,7 @@ var image = {
 			$('#img').hide();
 			$('#img2').hide();
 
-  			// When the user clicks, open an infowindow
+  			// When the user hovers, open an infowindow
 			map.data.addListener('mouseover', function(event) {
 				index = event.feature.getProperty("index");
 				floors = event.feature.getProperty("num_floor");
