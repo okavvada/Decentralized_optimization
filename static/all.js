@@ -1,15 +1,181 @@
 var map;
 
 function initMap() {
+	var styledMapType = new google.maps.StyledMapType(
+	[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#bdbdbd"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#ffffff"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#dadada"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#c9c9c9"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  }
+], {name: 'Styled Map'});
+
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {
 			lat: 37.750893,
 			lng: -122.443439
 		},
-		zoom: 13
-		
+		zoom: 13, 
+		mapTypeControlOptions: {
+            mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
+                    'styled_map']
+          }		
 	});
 
+var i = 0;
 
 	function placeMarker(location) {
     var marker = new google.maps.Marker({
@@ -67,9 +233,16 @@ var image = {
 			  	fillOpacity: 0.6
 			  }
 			        });
+
 			      });
-			
-			//var html = "<ul><li>Houses: " + data.properties.houses + "</li><li>Population: " + data.properties.population + "</li><li>index: " + data.properties.index + "</li></ul>";
+
+			var results_text = "<br /><u>Cluster " + i +"</u><br />Houses: " + data.features[1].properties.houses + "<br />Population: " + data.features[1].properties.population+ "<br />";
+  			var results = document.getElementById('results');
+			results.style.fontSize = "14px";
+			var div = document.createElement('div');
+			div.innerHTML = results_text;
+			results.appendChild(div);
+
 			var infowindow = new google.maps.InfoWindow();
 
 			$('#img').hide();
@@ -83,10 +256,9 @@ var image = {
 				sum_pop_commercial = Math.ceil(event.feature.getProperty("SUM_pop_commercial"));
 				total_pop = event.feature.getProperty("population");
 				total_buildings = event.feature.getProperty("houses");
-				var html = "<ul><b><font size="+ 3 + ">Total Population: " + total_pop + "<br />Total Buildings: " + total_buildings + "</font></b></li><li>floors: " + floors + "</li><li>Residential_Pop: " + sum_pop_residential + "</li><li>Commercial_Pop: " + sum_pop_commercial + "</li></ul>";
+				var html = "<u>Cluster " + i +"</u><br />floors: " + floors + "<br />Residential_Pop: " + sum_pop_residential + "<br />Commercial_Pop: " + sum_pop_commercial;
       			infowindow.setContent(html);
       			infowindow.setPosition(event.latLng);
-      			//infowindow.setOptions({pixelOffset: new google.maps.Size(10,10)});
       			infowindow.setOptions({disableAutoPan: true});
       			infowindow.open(map);
   			});
@@ -96,6 +268,8 @@ var image = {
   			})
 
 		}) 
+
+		i +=1;
 	}); 
 
 	var icons = {
@@ -122,7 +296,12 @@ var image = {
 	      var div = document.createElement('div');
 	      div.innerHTML = '<img src="' + icon + '"> ' + name;
 	      legend.appendChild(div);
-    }
-        map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
+    }
+
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(legend);
+        map.controls[google.maps.ControlPosition.RIGHT_TOP].push(results);
+		
+		map.mapTypes.set('styled_map', styledMapType);
+        map.setMapTypeId('styled_map');
       }

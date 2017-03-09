@@ -1,5 +1,6 @@
 *.pyc
 *.json
+*.csv
 *.geojson
 *.log
 *.sublime-project

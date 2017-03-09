@@ -82,10 +82,10 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, e, f, g, h):
 
 	#Calculate cost
 	if metric == 'cost':
-		inbuilding_pumping_cost = pump_cost_building(inbuilding_floors, SUM_pop_residential, SUM_pop_commercial)
+		inbuilding_pumping = pump_cost_building(inbuilding_floors, SUM_pop_residential, SUM_pop_commercial)
 		inbuilding_treatment_cost = find_treatment_cost(SUM_pop_residential, SUM_pop_commercial, 0, 0, a, b, c, d) + find_treatment_embodied_cost(SUM_pop_residential, SUM_pop_commercial, 0, 0, e, f, g, h, ttype = True)
 		infrastructure_cost = find_infrastructure_cost(SUM_pop_residential, SUM_pop_commercial, 0, 0, total_dist)
-		total_metric = inbuilding_pumping_cost + inbuilding_treatment_cost + infrastructure_cost
+		total_metric = inbuilding_pumping + inbuilding_treatment_cost + infrastructure_cost
 
 	mydeque.append(True)
 
