@@ -51,10 +51,46 @@
         border: 3px solid #000;
       }
 
-
-
     h3 {
       margin:0px;
+    }
+
+    #controlUICost {
+      background-color: #fff;
+      border: 1px solid #989D9E;
+      border-radius: 1px;
+      cursor: pointer;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+
+    #controlTextCost {
+      color:  #2F3030;
+      font-family: Arial, sans-serif;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 35px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+     #controlUIEnergy {
+      background-color: #fff;
+      border: 1px solid #989D9E;
+      border-radius: 1px;
+      cursor: pointer;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+
+    #controlTextEnergy {
+      color: #2F3030;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 35px;
+      padding-left: 10px;
+      padding-right: 10px;
     }
 
     </style>
@@ -64,6 +100,10 @@
     <div id="map"></div>
     <div id="legend"><h3>Legend</h3></div>
     <div id="results"><h3>Summary Results</h3></div>
+    <div id="controlUIEnergy"></div>
+    <div id="controlTextEnergy">Energy</div>
+    <div id="controlUICost"></div>
+    <div id="controlTextCost">Cost</div>
     <script src="/static/all.js">
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"

@@ -1,5 +1,6 @@
 var map;
 
+
 function initMap() {
 	var styledMapType = new google.maps.StyledMapType(
 	[
@@ -201,6 +202,31 @@ var image = {
         scaledSize: new google.maps.Size(10, 10),     
     }; 
 
+ var metric = 'energy';
+
+var controlTextCost = document.getElementById('controlTextCost');
+var controlUICost = document.getElementById('controlUICost');
+	controlUICost.appendChild(controlTextCost);
+	controlUICost.addEventListener('click', function() {
+		controlTextCost.style['font-weight'] = 'bold';
+		controlUIEnergy.style['margin-left'] = '10px';
+		controlTextEnergy.style['font-weight'] = 'normal';
+		metric = 'cost';
+		return metric
+}); 
+
+var controlTextEnergy = document.getElementById('controlTextEnergy');
+var controlUIEnergy = document.getElementById('controlUIEnergy');
+	controlUIEnergy.appendChild(controlTextEnergy);
+	controlUIEnergy.addEventListener('click', function() {
+		controlTextEnergy.style['font-weight'] = 'bold';
+		controlUIEnergy.style['margin-left'] = '5px';
+		controlTextCost.style['font-weight'] = 'normal';
+		metric = 'energy';
+		return metric
+}); 
+
+
 	google.maps.event.addListener(map, 'click', function(event) {
 		placeMarker(event.latLng);
 		var place_lat_lon = event.latLng
@@ -208,9 +234,11 @@ var image = {
 		$('#img2').show();
 		$.getJSON("/lat_lng", {
 			lat: event.latLng.lat(),
-			lng: event.latLng.lng()
+			lng: event.latLng.lng(),
+			metric: metric
 		}, function(data) {
 			map.data.addGeoJson(data);
+
 
 			map.data.setStyle(function(feature) {
 				var color = '#6f786a';
@@ -236,7 +264,7 @@ var image = {
 
 			      });
 
-			var results_text = "<br /><u>Cluster " + i +"</u><br />Houses: " + data.features[1].properties.houses + "<br />Population: " + data.features[1].properties.population+ "<br />";
+			var results_text = "<br /><u>Cluster " + i +"</u> (" + metric + ")<br />Houses: " + data.features[1].properties.houses + "<br />Population: " + data.features[1].properties.population+ "<br />";
   			var results = document.getElementById('results');
 			results.style.fontSize = "14px";
 			var div = document.createElement('div');
@@ -301,7 +329,10 @@ var image = {
 
         map.controls[google.maps.ControlPosition.TOP_RIGHT].push(legend);
         map.controls[google.maps.ControlPosition.RIGHT_TOP].push(results);
+        
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlUIEnergy);
+		map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlUICost);
 		
 		map.mapTypes.set('styled_map', styledMapType);
-        map.setMapTypeId('styled_map');
-      }
+        map.setMapTypeId('roadmap');
+}

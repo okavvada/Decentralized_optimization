@@ -20,9 +20,9 @@ def root():
 def lat_lng():
   lat = float(request.args.get('lat'))
   lng = float(request.args.get('lng'))
-  path = 'document.csv'
+  metric = request.args.get('metric')
 
-  return flask.jsonify(getMyGeoJSON(lat = lat, lng = lng, path = path, metric = 'energy'))
+  return flask.jsonify(getMyGeoJSON(lat = lat, lng = lng, path = 'document.csv', metric = metric))
 
 def getMyGeoJSON(lat,lng, path, metric):
   polygon, points = getServiceArea((lat,lng), path, metric,  9.5, -0.3, 0, 0, 8, -0.1, 0, 0)
