@@ -25,7 +25,7 @@ def lat_lng():
   return flask.jsonify(getMyGeoJSON(lat = lat, lng = lng, path = 'document.csv', metric = metric))
 
 def getMyGeoJSON(lat,lng, path, metric):
-  polygon, points = getServiceArea((lat,lng), path, metric,  9.5, -0.3, 0, 0, 8, -0.1, 0, 0)
+  polygon, points = getServiceArea((lat,lng), path, metric,  9.5, -0.3, 0, 0, 0)
   return points
 
 if __name__ == '__main__':

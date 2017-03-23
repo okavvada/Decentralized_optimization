@@ -162,7 +162,7 @@ function initMap() {
       }
     ]
   }
-], {name: 'Styled Map'});
+], {name: 'Grayscale'});
 
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {
@@ -209,22 +209,51 @@ var controlUICost = document.getElementById('controlUICost');
 	controlUICost.appendChild(controlTextCost);
 	controlUICost.addEventListener('click', function() {
 		controlTextCost.style['font-weight'] = 'bold';
-		controlUIEnergy.style['margin-left'] = '10px';
 		controlTextEnergy.style['font-weight'] = 'normal';
+		controlTextGHG.style['font-weight'] = 'normal';
 		metric = 'cost';
 		return metric
 }); 
+	controlUICost.addEventListener('mouseover', function() {
+		controlUICost.style['background-color'] = '#efefef';
+	});
+	controlUICost.addEventListener('mouseout', function() {
+		controlUICost.style['background-color'] = '#fff';
+	});
 
 var controlTextEnergy = document.getElementById('controlTextEnergy');
 var controlUIEnergy = document.getElementById('controlUIEnergy');
 	controlUIEnergy.appendChild(controlTextEnergy);
 	controlUIEnergy.addEventListener('click', function() {
 		controlTextEnergy.style['font-weight'] = 'bold';
-		controlUIEnergy.style['margin-left'] = '5px';
 		controlTextCost.style['font-weight'] = 'normal';
+		controlTextGHG.style['font-weight'] = 'normal';
 		metric = 'energy';
 		return metric
 }); 
+	controlUIEnergy.addEventListener('mouseover', function() {
+		controlUIEnergy.style['background-color'] = '#efefef';
+	});
+	controlUIEnergy.addEventListener('mouseout', function() {
+		controlUIEnergy.style['background-color'] = '#fff';
+	});
+
+var controlTextGHG = document.getElementById('controlTextGHG');
+var controlUIGHG = document.getElementById('controlUIGHG');
+	controlUIGHG.appendChild(controlTextGHG);
+	controlUIGHG.addEventListener('click', function() {
+		controlTextGHG.style['font-weight'] = 'bold';
+		controlTextCost.style['font-weight'] = 'normal';
+		controlTextEnergy.style['font-weight'] = 'normal';
+		metric = 'GHG';
+		return metric
+}); 
+	controlUIGHG.addEventListener('mouseover', function() {
+		controlUIGHG.style['background-color'] = '#efefef';
+	});
+	controlUIGHG.addEventListener('mouseout', function() {
+		controlUIGHG.style['background-color'] = '#fff';
+	});
 
 
 	google.maps.event.addListener(map, 'click', function(event) {
@@ -332,6 +361,7 @@ var controlUIEnergy = document.getElementById('controlUIEnergy');
         
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlUIEnergy);
 		map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlUICost);
+		map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlUIGHG);
 		
 		map.mapTypes.set('styled_map', styledMapType);
         map.setMapTypeId('roadmap');

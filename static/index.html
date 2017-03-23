@@ -57,10 +57,11 @@
 
     #controlUICost {
       background-color: #fff;
-      border: 1px solid #989D9E;
+      border: 1px solid #e6e9ed;
       border-radius: 1px;
+      margin-top: 8px;
+      box-shadow: 0px 2px 2px #a1a4a8;
       cursor: pointer;
-      margin-bottom: 22px;
       text-align: center;
     }
 
@@ -70,16 +71,18 @@
       font-weight: normal;
       font-size: 16px;
       line-height: 35px;
+      width:40px;
       padding-left: 10px;
       padding-right: 10px;
     }
 
      #controlUIEnergy {
       background-color: #fff;
-      border: 1px solid #989D9E;
+      border: 1px solid #e6e9ed;
       border-radius: 1px;
+      margin-top: 8px;
+      box-shadow: 0px 2px 2px #a1a4a8;
       cursor: pointer;
-      margin-bottom: 22px;
       text-align: center;
     }
 
@@ -89,6 +92,28 @@
       font-weight: bold;
       font-size: 16px;
       line-height: 35px;
+      width:60px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    #controlUIGHG {
+      background-color: #fff;
+      border: 1px solid #e6e9ed;
+      border-radius: 1px;
+      margin-top: 8px;
+      box-shadow: 0px 2px 2px #a1a4a8;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    #controlTextGHG {
+      color:  #2F3030;
+      font-family: Arial, sans-serif;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 35px;
+      width:40px;
       padding-left: 10px;
       padding-right: 10px;
     }
@@ -104,6 +129,8 @@
     <div id="controlTextEnergy">Energy</div>
     <div id="controlUICost"></div>
     <div id="controlTextCost">Cost</div>
+    <div id="controlUIGHG"></div>
+    <div id="controlTextGHG">GHG</div>
     <script src="/static/all.js">
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"

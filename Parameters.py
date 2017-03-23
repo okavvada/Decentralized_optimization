@@ -1,5 +1,5 @@
-piping_embodied = 90 #MJ/m (diameter = 100 mm)
-piping_cost = 625 # $/m ###CHECK
+piping_embodied = 240 #MJ/m (diameter = 100 mm)
+piping_cost = 11.5 # $/m ###CHECK Kavvada
 pipe_lifetime = 25 #years
 water_weight = 9.8 #KN/m3
 wastewater_demand_residential = 0.185 #m3/person-day http://www.sfwater.org/modules/showdocument.aspx?documentid=6543
@@ -11,3 +11,7 @@ npr_water_demand_commercial = wastewater_demand_commercial*npr_percent_commercia
 pump_efficiency = 0.45
 in_builing_piping_sf = 0.06 #m/m2 #Hasik LCA building
 electricity_cost = 0.12 #$/kWh EIA
+electricity_GHG = 0.08 #kgCO2/kWh Hendrickson  ###CHECK
+US_electricity_GHG = 0.59 #kgCO2/kWh (EIA for electricity mix and LCA emission factors Stokes and Horvath http://uc-ciee.org/downloads/Life-cycleHorvath.pdf)
+treatment_embodied_GHG = 0.06 #kgCO2/m3 Kavvada
+treatment_embodied_energy = 0.3 #kWh/m3 Kavvada
