@@ -202,7 +202,7 @@ var image = {
         scaledSize: new google.maps.Size(10, 10),     
     }; 
 
- var metric = 'energy';
+var metric = 'energy';
 
 var controlTextCost = document.getElementById('controlTextCost');
 var controlUICost = document.getElementById('controlUICost');
@@ -256,6 +256,29 @@ var controlUIGHG = document.getElementById('controlUIGHG');
 	});
 
 
+var a = 9.5;
+var b = -0.3;
+var c = 0;
+var d = 0;
+
+document.getElementById("value_a").onchange = function() {
+    a = document.getElementById("value_a").value;
+    return a
+}
+document.getElementById("value_b").onchange = function() {
+    b = document.getElementById("value_b").value;
+    return b
+}
+document.getElementById("value_c").onchange = function() {
+    c = document.getElementById("value_c").value;
+    return c
+}
+document.getElementById("value_d").onchange = function() {
+    d = document.getElementById("value_d").value;
+    return d
+}
+
+
 	google.maps.event.addListener(map, 'click', function(event) {
 		placeMarker(event.latLng);
 		var place_lat_lon = event.latLng
@@ -264,7 +287,11 @@ var controlUIGHG = document.getElementById('controlUIGHG');
 		$.getJSON("/lat_lng", {
 			lat: event.latLng.lat(),
 			lng: event.latLng.lng(),
-			metric: metric
+			metric: metric,
+			a: a,
+			b: b,
+			c: c,
+			d: d
 		}, function(data) {
 			map.data.addGeoJson(data);
 

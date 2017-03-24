@@ -51,9 +51,46 @@
         border: 3px solid #000;
       }
 
+    #operational_energy {
+        font-family: Arial, sans-serif;
+        background: #fff;
+        font-size: 14px;
+        padding: 5px;
+        border: 1px solid #000;
+        position: absolute;
+        top: 50px;
+        left: 10px;
+        width: 250px;
+        height: 110px;
+      }
+
     h3 {
       margin:0px;
     }
+
+    h4 {
+      margin:2px;
+      text-align: center;
+      text-decoration: underline;
+    }
+
+    .value{
+      width: 50px;
+      margin-right:20px;
+      margin-bottom:5px;
+      padding-left: 3px;
+    }
+
+    #set_value{
+      border: 1px solid #abadb2;
+      background-color: #e6e9ed;
+      margin-left: 20px;
+      padding-right: 5px;
+      padding-left: 5px;
+      padding-bottom: 2px;
+      
+    }
+
 
     #controlUICost {
       background-color: #fff;
@@ -125,6 +162,9 @@
     <div id="map"></div>
     <div id="legend"><h3>Legend</h3></div>
     <div id="results"><h3>Results Summary</h3></div>
+    <div id="operational_energy"><h4>Treatment Operational Energy</h4><img src="/static/images/energy_equation.png">
+    <span id="set_value">a=</span><input class="value" type='text' id="value_a" value='9.5' /><span id="set_value">b=</span><input class="value" type='text' id="value_b" value='-0.3'/>
+    <br /><span id="set_value">c=</span><input class="value" type='text' id="value_c" value='0' /><span id="set_value">d=</span><input class="value" type='text' id="value_d" value='0'/></div>
     <div id="controlUIEnergy"></div>
     <div id="controlTextEnergy">Energy</div>
     <div id="controlUICost"></div>
