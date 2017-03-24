@@ -23,13 +23,14 @@ def lat_lng():
   metric = request.args.get('metric')
   a = float(request.args.get('a'))
   b = float(request.args.get('b'))
-  c = float(request.args.get('d'))
-  d = float(request.args.get('c'))
+  c = float(request.args.get('c'))
+  d = float(request.args.get('d'))
+  direct = float(request.args.get('direct'))
 
-  return flask.jsonify(getMyGeoJSON(lat = lat, lng = lng, path = 'document.csv', metric = metric, a = a, b = b, c = c, d = d))
+  return flask.jsonify(getMyGeoJSON(lat = lat, lng = lng, path = 'document.csv', metric = metric, a = a, b = b, c = c, d = d, direct = direct))
 
-def getMyGeoJSON(lat,lng, path, metric, a, b, c, d):
-  polygon, points = getServiceArea((lat,lng), path, metric,  a, b, c, d, 0)
+def getMyGeoJSON(lat,lng, path, metric, a, b, c, d, direct):
+  polygon, points = getServiceArea((lat,lng), path, metric,  a, b, c, d, direct)
   return points
 
 if __name__ == '__main__':

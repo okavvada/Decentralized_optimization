@@ -260,6 +260,7 @@ var a = 9.5;
 var b = -0.3;
 var c = 0;
 var d = 0;
+var direct = 0;
 
 document.getElementById("value_a").onchange = function() {
     a = document.getElementById("value_a").value;
@@ -278,6 +279,10 @@ document.getElementById("value_d").onchange = function() {
     return d
 }
 
+document.getElementById("direct_val").onchange = function() {
+    direct = document.getElementById("direct_val").value;
+    return direct
+}
 
 	google.maps.event.addListener(map, 'click', function(event) {
 		placeMarker(event.latLng);
@@ -291,7 +296,8 @@ document.getElementById("value_d").onchange = function() {
 			a: a,
 			b: b,
 			c: c,
-			d: d
+			d: d,
+			direct: direct
 		}, function(data) {
 			map.data.addGeoJson(data);
 
