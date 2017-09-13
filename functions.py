@@ -13,47 +13,9 @@ def readBuildings(path):
 	data_all = pd.read_csv(path)
 	return data_all
 
-
-# def findN_DataFrame(index, dataframe):
-# 	data = pd.DataFrame()
-# 	for i in index:
-# 	    select_row = dataframe.iloc[[i]]
-# 	    data = data.append(select_row)
-# 	return data
-
 def findN_DataFrame(index, dataframe):
     data = dataframe.iloc[index,:]
     return data
-
-
-# def hierarchical_cluster(X_lat_lon, Z):
-#     clusters = {}
-#     i = 1
-#     for item in Z:
-#         if (item[0]<len(X_lat_lon)) and (item[1]<len(X_lat_lon)):
-#             clusters.update({i:[int(item[0]),int(item[1])]})
-#             i += 1
-#         elif (item[0]<len(X_lat_lon)) and (item[1]>=len(X_lat_lon)):
-#             ind_new = int(item[1]-len(X_lat_lon)+1)
-#             old = clusters[ind_new]
-#             new = old + [int(item[0])]
-#             clusters.update({i:(new)})
-#             i += 1
-#         elif (item[0]>=len(X_lat_lon)) and (item[1]<len(X_lat_lon)):
-#             ind_new = int(item[0]-len(X_lat_lon)+1)
-#             old = clusters[ind_new]
-#             new=old + [int(item[1])]
-#             clusters.update({i:new})
-#             i += 1 
-#         elif (item[0]>=len(X_lat_lon)) and (item[1]>=len(X_lat_lon)):
-#             ind_new_1 = int(item[0]-len(X_lat_lon)+1)
-#             ind_new_2 = int(item[1]-len(X_lat_lon)+1)
-#             old_1 = clusters[ind_new_1]
-#             old_2 = clusters[ind_new_2]
-#             new = old_1 + old_2
-#             clusters.update({i:new})
-#             i += 1 
-#     return clusters
 
 def distance(lat_lon1, latlon2):
     dist = vincenty(lat_lon1, latlon2).meters
@@ -64,25 +26,12 @@ def create_tree(X_lat_lon_to_check, query_point):
     dist, index = tree.query(query_point, k=len(X_lat_lon_to_check))
     return dist, index
 
-# def populate_Graph(G, start, data):
-#     G.add_node(start)
-#     for destination in G.nodes():
-#         dist = vincenty(data.iloc[int(start)]['lat_lon'], data.iloc[int(destination)]['lat_lon']).meters
-#         G.add_edge(start, destination, weight=dist)
-
 def populate_Graph(G, start, data):
     G.add_node(start, pos=data.iloc[int(start)]['lat_lon'])
     position=nx.get_node_attributes(G,'pos')
     for destination in G.nodes():
         dist = vincenty(position[start], position[destination]).meters
         G.add_edge(start, destination, weight=dist)
-
-# def find_MST_distance(G, start, previous_dist):
-#     MST_edges = nx.minimum_spanning_edges(G, weight='weight')
-#     edgelist=list(MST_edges)
-#     MST_distance = 0
-#     MST_distance = sum(list(map(lambda t: t[2].get('weight', 1), edgelist)))
-#     return MST_distance
 
 def find_MST_distance(G, start, previous_dist):
     distance = 9999999999
@@ -125,9 +74,7 @@ def pump_energy_building(floors, building_pop_residential, building_pop_commerci
 
 def find_treatment_energy(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b,c,d):
     flow = calc_wastewater_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial)
-    #Find embodied energy function
     treat_energy = (a*(flow)**(b)+c*flow+d)*3.6
-    #treat_energy = -0.047*(flow)+(2)
     return treat_energy 
 
 def find_treatment_embodied_energy(ttype=False):
@@ -156,16 +103,21 @@ def pump_cost_building(floors, building_pop_residential, building_pop_commercial
     cost = energy/3.6*P.electricity_cost #$/m3
     return cost
 
-def find_treatment_cost(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d):
-    treat_energy = find_treatment_energy(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d)/3.6
-    treat_cost = treat_energy*P.electricity_cost #$/m3
-    return treat_cost
-
-
-def find_treatment_embodied_cost(ttype=False):
-    if ttype == False:
-        treat_cost = 0
-    return treat_cost
+def find_treatment_cost(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial):
+    flow = calc_wastewater_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial) #m3/day
+    total_people = building_pop_residential+ building_pop_commercial+totals_pop_residential+totals_pop_commercial
+    if total_people<=50:
+        treat_cost = 601.52*total_people**(-0.361) * total_people #$/y Eggimann connection rates
+        treat_cost_m3 = treat_cost/(flow*365) #$/m3
+        treat_cap_cost_m3 = treat_cost_m3*0.05 #$/m3 5% capital costs Montoya 2015
+        treat_oper_cost_m3 = treat_cost_m3*0.95 #$/m3
+    else:
+        capex = (9512.8*total_people**(-0.209))*total_people/P.lifetime_WWTP #$/y Eggimann decentralization scale
+        opex = (243.45*total_people**(-0.171))*total_people  #$/y Eggimann decentralization scale
+        treat_cost_cap = capex+opex #$/y Eggimann decentralization scale
+        treat_cap_cost_m3 = capex/(flow*365) #$/m3
+        treat_oper_cost_m3 = opex/(flow*365) #$/m3
+    return treat_cap_cost_m3, treat_oper_cost_m3
 
 def find_infrastructure_cost(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, piping):
     flow = calc_water_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial) #m3/day
@@ -199,7 +151,6 @@ def find_treatment_embodied_GHG(ttype=False):
 
 def find_treatment_direct_GHG(direct):
     return direct #kg/m3
-
 
 def find_infrastructure_GHG(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, piping):
     flow = calc_water_flow(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial) #m3/day

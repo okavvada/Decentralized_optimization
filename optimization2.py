@@ -44,11 +44,9 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 
 	elapsed_query = time.time() - t_s
 
-	#X_lat_lon_select = list(data['lat_lon'])
-	# Z = linkage(X_lat_lon_select, 'ward')
 	data = data.reset_index()
 	# clusters = hierarchical_cluster(X_lat_lon_select, Z)
-	index_0 = data[(data['y_lat'] - queryPoint[0])<0.0001].index.tolist()[0]
+	index_0 = 0
 
 	t_dataframe = time.time()
 	#initialize
@@ -76,23 +74,25 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 	#Calculate energy
 	if metric == 'energy':
 		inbuilding_pumping = pump_energy_building(inbuilding_floors, SUM_pop_residential, SUM_pop_commercial)
-		inbuilding_treatment_energy = find_treatment_energy(SUM_pop_residential, SUM_pop_commercial, 0, 0, a, b, c, d) + find_treatment_embodied_energy(ttype = True)
+		inbuilding_treatment = find_treatment_energy(SUM_pop_residential, SUM_pop_commercial, 0, 0, a, b, c, d) 
+		inbuilding_treatment_embodied = find_treatment_embodied_energy(ttype = True)
 		infrastructure = find_infrastructure_energy(SUM_pop_residential, SUM_pop_commercial, 0, 0, total_dist)
-		total_metric = inbuilding_pumping + inbuilding_treatment_energy + infrastructure
+		total_metric = inbuilding_pumping + inbuilding_treatment + inbuilding_treatment_embodied + infrastructure
 
 	#Calculate cost
 	if metric == 'cost':
 		inbuilding_pumping = pump_cost_building(inbuilding_floors, SUM_pop_residential, SUM_pop_commercial)
-		inbuilding_treatment_cost = find_treatment_cost(SUM_pop_residential, SUM_pop_commercial, 0, 0, a, b, c, d) + find_treatment_embodied_cost(ttype = False)
-		infrastructure_cost = find_infrastructure_cost(SUM_pop_residential, SUM_pop_commercial, 0, 0, total_dist)
-		total_metric = inbuilding_pumping + inbuilding_treatment_cost + infrastructure_cost
+		inbuilding_treatment_embodied, inbuilding_treatment = find_treatment_cost(SUM_pop_residential, SUM_pop_commercial, 0, 0) 
+		infrastructure = find_infrastructure_cost(SUM_pop_residential, SUM_pop_commercial, 0, 0, total_dist)
+		total_metric = inbuilding_pumping + inbuilding_treatment + inbuilding_treatment_embodied + infrastructure
 
 	#Calculate GHG
 	if metric == 'GHG':
 		inbuilding_pumping = pump_GHG_building(inbuilding_floors, SUM_pop_residential, SUM_pop_commercial)
-		inbuilding_treatment_GHG = find_treatment_GHG(SUM_pop_residential, SUM_pop_commercial, 0, 0, a, b, c, d) + find_treatment_embodied_GHG(ttype = True) + find_treatment_direct_GHG(direct)
-		infrastructure_GHG = find_infrastructure_GHG(SUM_pop_residential, SUM_pop_commercial, 0, 0, total_dist)
-		total_metric = inbuilding_pumping + inbuilding_treatment_GHG + infrastructure_GHG
+		inbuilding_treatment = find_treatment_GHG(SUM_pop_residential, SUM_pop_commercial, 0, 0, a, b, c, d) 
+		inbuilding_treatment_embodied = find_treatment_embodied_GHG(ttype = True) + find_treatment_direct_GHG(direct)
+		infrastructure = find_infrastructure_GHG(SUM_pop_residential, SUM_pop_commercial, 0, 0, total_dist)
+		total_metric = inbuilding_pumping + inbuilding_treatment + inbuilding_treatment_embodied + infrastructure
 
 	mydeque.append(True)
 
@@ -102,7 +102,8 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 
 	X_lat_lon_to_check = []
 
-	totals = {'num_buildings':num_buildings, 'SUM_pop_residential':SUM_pop_residential, 'SUM_pop_commercial':SUM_pop_commercial  ,'ELEV_treat':MIN_ELEV, 'total_dist':total_dist, 'inbuilding_pumping':inbuilding_pumping, 'total_metric':total_metric}
+	totals = {'num_buildings':num_buildings, 'SUM_pop_residential':SUM_pop_residential, 'SUM_pop_commercial':SUM_pop_commercial  ,'ELEV_treat':MIN_ELEV, 'total_dist':total_dist, 'pumping':inbuilding_pumping, 
+	'treatment':inbuilding_treatment, 'treatment_embodied':inbuilding_treatment_embodied, 'infrastructure':infrastructure,'total_metric':total_metric}
 
 
 	elapsed_init = time.time() - t_init_calc
@@ -142,28 +143,27 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 
 		#Calculate energy
 		if metric == 'energy':
-			conveyance_energy = find_conveyance_energy(building_elevation, totals['ELEV_treat'], building_floors, building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'])
-			treatment_energy = find_treatment_energy(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], a, b, c, d)
+			conveyance = find_conveyance_energy(building_elevation, totals['ELEV_treat'], building_floors, building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'])
+			treatment = find_treatment_energy(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], a, b, c, d)
 			treatment_embodied = find_treatment_embodied_energy(ttype = True)
 			infrastructure = find_infrastructure_energy(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], piping_distance)
-			total_metric = conveyance_energy + treatment_energy + infrastructure + treatment_embodied
+			total_metric = conveyance + treatment + infrastructure + treatment_embodied
 
 		#Calculate cost
 		if metric == 'cost':
-			conveyance_cost = find_conveyance_cost(building_elevation, totals['ELEV_treat'], building_floors, building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'])
-			treatment_cost = find_treatment_cost(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], a, b, c, d)
-			treatment_embodied_cost = find_treatment_embodied_cost(ttype = False)
-			infrastructure_cost = find_infrastructure_cost(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], piping_distance)
-			total_metric = conveyance_cost + treatment_cost + infrastructure_cost + treatment_embodied_cost
+			conveyance = find_conveyance_cost(building_elevation, totals['ELEV_treat'], building_floors, building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'])
+			treatment_embodied, treatment = find_treatment_cost(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'])
+			infrastructure = find_infrastructure_cost(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], piping_distance)
+			total_metric = conveyance + treatment + infrastructure + treatment_embodied
 
 		#Calculate GHG
 		if metric == 'GHG':
-			conveyance_GHG = find_conveyance_GHG(building_elevation, totals['ELEV_treat'], building_floors, building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'])
-			treatment_GHG = find_treatment_GHG(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], a, b, c, d)
-			treatment_embodied_GHG = find_treatment_embodied_GHG(ttype = True)
-			treatment_direct_GHG = find_treatment_direct_GHG(direct)
-			infrastructure_GHG = find_infrastructure_GHG(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], piping_distance)
-			total_metric = conveyance_GHG + treatment_GHG + infrastructure_GHG + treatment_embodied_GHG + treatment_direct_GHG
+			conveyance = find_conveyance_GHG(building_elevation, totals['ELEV_treat'], building_floors, building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'])
+			treatment = find_treatment_GHG(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], a, b, c, d)
+			treatment_embodied = find_treatment_embodied_GHG(ttype = True)
+			treatment_direct = find_treatment_direct_GHG(direct)
+			infrastructure = find_infrastructure_GHG(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], piping_distance)
+			total_metric = conveyance + treatment + infrastructure + treatment_embodied + treatment_direct
 
 		seen = seen.append(row)
 
@@ -178,12 +178,17 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 			totals['ELEV_treat'] = min(totals['ELEV_treat'], building_elevation)
 			totals['total_dist'] = totals['total_dist'] + piping_distance
 			totals['total_metric'] = total_metric
+			totals['pumping'] = conveyance
+			totals['treatment'] = treatment
+			totals['treatment_embodied'] = treatment_embodied
+			totals['infrastructure'] = infrastructure
 			distance = MST_distance
 
 		else:
 			arg = True
 			acc = 'no'
 			G.remove_node(int(index))
+			total_metric = totals['total_metric']
 
 		data.loc[int(index),'metric'] = total_metric
 		data.loc[int(index),'accept'] = acc
@@ -205,6 +210,11 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 	sum_population = int(cluster_points['SUM_pop_residential'].sum()+cluster_points['SUM_pop_commercial'].sum())
 	num_houses = int(cluster_points['SUM_pop_residential'].count())
 
+	pumping_tot = totals['pumping']
+	treatment_tot = totals['treatment']
+	treatment_embodied_tot = totals['treatment_embodied']
+	piping_tot = totals['infrastructure']
+
 	data['population'] = sum_population
 	data['houses'] = num_houses	
 
@@ -217,20 +227,20 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 	elapsed2 = time.time() - t2
 	elapsed_out = time.time() - out_t3
 
-	print("begin time %s "%begin_time, file=stderr)
-	print("tree time %s "%elapsed_tree, file=stderr)
-	print("init query %s "%elapsed_query, file=stderr)
-	print("init dataf %s "%elapsed_dataframe, file=stderr)
-	print("init time %s "%elapsed_init, file=stderr)
-	print("Grpah time %s "%graph_time, file=stderr)
-	print("MST time %s "%MST_time, file=stderr)
-	print("calc time %s "%calc_time, file=stderr)
-	print("out time %s "%elapsed_out, file=stderr)
-	print("loop time %s "%elapsed2, file=stderr)
+	# print("begin time %s "%begin_time, file=stderr)
+	# print("tree time %s "%elapsed_tree, file=stderr)
+	# print("init query %s "%elapsed_query, file=stderr)
+	# print("init dataf %s "%elapsed_dataframe, file=stderr)
+	# print("init time %s "%elapsed_init, file=stderr)
+	# print("Grpah time %s "%graph_time, file=stderr)
+	# print("MST time %s "%MST_time, file=stderr)
+	# print("calc time %s "%calc_time, file=stderr)
+	# print("out time %s "%elapsed_out, file=stderr)
+	# print("loop time %s "%elapsed2, file=stderr)
 
 	with open(path,'a') as f:
 	    writer=csv.writer(f)
 	    writer.writerow([])
-	    writer.writerow([queryPoint,sum_population])
+	    writer.writerow([queryPoint,sum_population,total_metric, pumping_tot, treatment_tot, treatment_embodied_tot, piping_tot])
 
 	return polygon_properties, point_properties
