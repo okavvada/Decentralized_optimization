@@ -10,13 +10,12 @@ import json
 import csv
 import collections
 from geojson import Feature, Point, MultiPoint, FeatureCollection
-#from shapely.geometry import Point
 import time
 
 from functions import *
 import Parameters as P
 
-data_all = readBuildings('../GIS_data/combined_buildings_2.csv')
+data_all = readBuildings('input_data/combined_buildings_2.csv')
 
 if len(data_all)>500:
 	k = 500
@@ -45,7 +44,7 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 	elapsed_query = time.time() - t_s
 
 	data = data.reset_index()
-	# clusters = hierarchical_cluster(X_lat_lon_select, Z)
+
 	index_0 = 0
 
 	t_dataframe = time.time()
@@ -203,10 +202,6 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 
 	out_t3 = time.time() 
 
-	cluster_points.to_csv('../GIS_data/test_results/output_points.csv')
-	data.to_csv('../GIS_data/test_results/all_points.csv')
-	seen.to_csv('../GIS_data/test_results/seen_points.csv')
-
 	sum_population = int(cluster_points['SUM_pop_residential'].sum()+cluster_points['SUM_pop_commercial'].sum())
 	num_houses = int(cluster_points['SUM_pop_residential'].count())
 
@@ -217,8 +212,6 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 
 	data['population'] = sum_population
 	data['houses'] = num_houses	
-
-	polygon_properties= []
 
 	cols = ['index', 'SUM_pop_residential','SUM_pop_commercial', 'metric', 'accept', 'num_floor', 'population', 'houses']
 	geojson = df_to_geojson(data, cols)
@@ -243,4 +236,4 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 	    writer.writerow([])
 	    writer.writerow([queryPoint,sum_population,total_metric, pumping_tot, treatment_tot, treatment_embodied_tot, piping_tot])
 
-	return polygon_properties, point_properties
+	return point_properties
