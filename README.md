@@ -66,6 +66,15 @@ The model can be run as a standalone python model for scenario planning and mult
 - a float for the direct GHG emissions of the treatment. This is zero as a default.
 
 
+## Start a local instance
+To run a local instance of the webtool:
+- Clone the repo
+- Navigate your command prompt inside the repo
+- Start the server by running `FLASK_DEBUG=1 FLASK_APP=server.py flask run`
+- Navigate to localhost:5000
+- and Done! Easy!
+
+
 
 
 
