@@ -59,7 +59,7 @@ The outputs of the algorithmic process are going to appear on the screen after t
 
 ## Standalone Modeling
 The model can be run as a standalone python model for scenario planning and multiple iterations for analysis. This can be done by simply calling the `getServiceArea` function that is located inside the `optimization2.py` file. The required inputs for the function to run are:
-- the queryPoint, which is the lat, lon location of the point of interest. Input that as a tuple (lat, lon)
+- the query point, which is the lat, lon location of the point of interest. Input that as a tuple (lat, lon)
 - the destination path, which will be used for saving the csv
 - a string of the metric of interest, this could be either "cost", "energy" or "GHG"
 - four float parameters a, b, c, d, which correspond to the treatment energy equation constant (the equation is modeled as a polynomial) and
