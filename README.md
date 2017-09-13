@@ -42,10 +42,18 @@ The algorithm involves the following steps:
 
 
 ## Outputs
-The output of the algorithmic process as described previously is a csv file located at the specified path when calling the model (see structure section below for application). The csv includes the locations of all the buildings in order of assessment along with information of the population served, the total impact of interest, and the breakdown of the total impact of interest to the pumping, treatment operational, treatment embodied and piping.
+The output of the algorithmic process as described previously is a csv file located at the specified path when calling the model (see Standalone Modeling section below for application). The csv includes the locations of all the buildings in order of assessment along with information of the population served, the total impact of interest, and the breakdown of the total impact of interest to the pumping, treatment operational, treatment embodied and piping. 
 It also outputs a json file with all the building locations and a tag of whether they are selected or not (accept = 'yes' or 'no') along with the total population served and the number of buildings for immediate visualization in the webtool. 
 
-## Structure
+
+## Standalone Modeling
+The model can be run as a standalone python model for scenario planning and multiple iterations for analysis. This can be done by simply calling the `getServiceArea` function that is located inside the `optimization2.py` file. The required inputs for the function to run are:
+- the queryPoint, which is the lat, lon location of the point of interest. Input that as a tuple (lat, lon)
+- the destination path, which will be used for saving the csv
+- a string of the metric of interest, this could be either "cost", "energy" or "GHG"
+- four float parameters a, b, c, d, which correspond to the treatment energy equation constant (the equation is modeled as a polynomial) and
+- a float for the direct GHG emissions of the treatment. This is zero as a default.
+
 
 
 
