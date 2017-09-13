@@ -1,6 +1,7 @@
 # Optimal Scale for Decentralized Water Reuse
 
 This repository consists of the code base for the web tool developed under the publication:
+
 The webtool can be found free of charge at:
 
 If you wish to use the tool for your own analysis please provide proper attribution by citing the work:
