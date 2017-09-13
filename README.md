@@ -38,7 +38,12 @@ The algorithm involves the following steps:
 - After this first assessment, the second in-line building is considered. This building is added to a Graph along with the previous building. This system is now considered a cluster. Given this cluster the distance between the two buildings is calculated. 
 - The process for impact calculation is repeated similarly as before but now considering the new cluster of buildings. Given this new cluster a new impact is defined.
 - This new impact is compared to the previous impact of the cluster. If the new impact is smaller than the previous then the new building is kept in the cluster as it is beneficial for the overall systems performance. If not, then the building is discarded and the previous system's performance is kept.
-- The process continues until all 500 buildings are assessed. 
+- The process continues until all close (k=500) buildings are assessed. 
+
+
+## Outputs
+The output of the algorithmic process as described previously is a csv file located at the specified path when calling the model (see structure section below for application). The csv includes the locations of all the buildings in order of assessment along with information of the population served, the total impact of interest, and the breakdown of the total impact of interest to the pumping, treatment operational, treatment embodied and piping.
+It also outputs a json file with all the building locations and a tag of whether they are selected or not (accept = 'yes' or 'no') along with the total population served and the number of buildings for immediate visualization in the webtool. 
 
 ## Structure
 
