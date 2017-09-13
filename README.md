@@ -46,15 +46,6 @@ The output of the algorithmic process as described previously is a csv file loca
 It also outputs a json file with all the building locations and a tag of whether they are selected or not (accept = 'yes' or 'no') along with the total population served and the number of buildings for immediate visualization in the webtool. 
 
 
-## Standalone Modeling
-The model can be run as a standalone python model for scenario planning and multiple iterations for analysis. This can be done by simply calling the `getServiceArea` function that is located inside the `optimization2.py` file. The required inputs for the function to run are:
-- the queryPoint, which is the lat, lon location of the point of interest. Input that as a tuple (lat, lon)
-- the destination path, which will be used for saving the csv
-- a string of the metric of interest, this could be either "cost", "energy" or "GHG"
-- four float parameters a, b, c, d, which correspond to the treatment energy equation constant (the equation is modeled as a polynomial) and
-- a float for the direct GHG emissions of the treatment. This is zero as a default.
-
-
 ## Webtool
 The webtool is connected to the python algorithm described previously through Flask. Details on the server part can be found on the `server.py` file. As it is a javascript based webtool the web development parameters are specified in the `static\index.html` file. The user can interact with the webpage and create certain events that are logged and passed to the python module. Specifically, the user can:
 - Click on the map, to given the signal of the query point location, from where the algorithmic process is going to initiate.
@@ -64,6 +55,16 @@ The webtool is connected to the python algorithm described previously through Fl
 - Change the visualization by making the background map satellite, road or greyscale.
 
 The outputs of the algorithmic process are going to appear on the screen after the computation is done. The outputs consist of the number of the total number of houses served and the served population and a visualization on the map of the selected and discarded buildings assessed.
+
+
+## Standalone Modeling
+The model can be run as a standalone python model for scenario planning and multiple iterations for analysis. This can be done by simply calling the `getServiceArea` function that is located inside the `optimization2.py` file. The required inputs for the function to run are:
+- the queryPoint, which is the lat, lon location of the point of interest. Input that as a tuple (lat, lon)
+- the destination path, which will be used for saving the csv
+- a string of the metric of interest, this could be either "cost", "energy" or "GHG"
+- four float parameters a, b, c, d, which correspond to the treatment energy equation constant (the equation is modeled as a polynomial) and
+- a float for the direct GHG emissions of the treatment. This is zero as a default.
+
 
 
 
