@@ -30,10 +30,15 @@ Other inputs in the model that can be customized are located in the `Parameters.
 
 
 ## Algorithmic Process
-The entire algorithmic process is included in the `optimization2.py` file. The basic functions used in calculations are located in the `functions.py` file.
+The entire algorithmic process is included in the `optimization2.py` file. The basic functions used in calculations are located in the `functions.py` file. To account for the spatially sensitive conditions and for the model to be able to assess multiple levels of decentralization, the developed algorithmic model expands its size through an iterative process with an input of the existing building location and characteristics. The model is capable of assessing different metrics of water reuse, namely economic cost, energy intensity and GHG emissions as defined by the user. As the model is capable of assessing different metrics each of the metric in question will be called "impact" from now on.
 The algorithm involves the following steps:
-- All the input buildings are loaded and a KD tree is constructed from their coordinate locations. The KD tree is used for optimal searching of the 500 closest buildings to the user query point and listed in ascending order based on the euclidean distance from the user query point. 
-- 
+- All the input buildings are loaded and a KD tree is constructed from their coordinate locations. The KD tree is used for optimal searching of the 500 closest buildings to the user query point and listed in ascending order based on the euclidean distance from the user query point. The 500 is an arbitrarely chosen value to provide a cutoff point for the analysis. It could be altered as see fit.
+- The building located the closest to the point of interest is considered as the first building to enter the algorithm. 
+- Impact calculation: Given this starting point the impact of water reuse is calculated with only this building in mind. This involves estimating the impact of treating the required volume of water (given the population of the building), the embodied impact for treatment (includes construction and transportation), the in-building impact for delivering the recycled water to all the building floors and finally the in-between building impact for sharing recycled water in the case of multiple buildings (in this first case this is zero). These operations are defined under the `metric == impact` operation in the module.
+- After this first assessment, the second in-line building is considered. This building is added to a Graph along with the previous building. This system is now considered a cluster. Given this cluster the distance between the two buildings is calculated. 
+- The process for impact calculation is repeated similarly as before but now considering the new cluster of buildings. Given this new cluster a new impact is defined.
+- This new impact is compared to the previous impact of the cluster. If the new impact is smaller than the previous then the new building is kept in the cluster as it is beneficial for the overall systems performance. If not, then the building is discarded and the previous system's performance is kept.
+- The process continues until all 500 buildings are assessed. 
 
 ## Structure
 
