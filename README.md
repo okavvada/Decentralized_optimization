@@ -55,5 +55,17 @@ The model can be run as a standalone python model for scenario planning and mult
 - a float for the direct GHG emissions of the treatment. This is zero as a default.
 
 
+## Webtool
+The webtool is connected to the python algorithm described previously through Flask. Details on the server part can be found on the `server.py` file. As it is a javascript based webtool the web development parameters are specified in the `static\index.html` file. The user can interact with the webpage and create certain events that are logged and passed to the python module. Specifically, the user can:
+- Click on the map, to given the signal of the query point location, from where the algorithmic process is going to initiate.
+- Click on a metric, "cost", "energy", "GHG" to define the metric of interest.
+- Set the treatment equation parameters as floats in the corresponding boxes.
+- Set the direct GHG emissions for treatment as a float in the corresponding box.
+- Change the visualization by making the background map satellite, road or greyscale.
+
+The outputs of the algorithmic process are going to appear on the screen after the computation is done. The outputs consist of the number of the total number of houses served and the served population and a visualization on the map of the selected and discarded buildings assessed.
+
+
+
 
 
