@@ -30,8 +30,10 @@ Other inputs in the model that can be customized are located in the `Parameters.
 
 
 ## Algorithmic Process
-The entire algorithmic process is included in the `optimization2.py` file. 
-All the input buildings are loaded and a KD tree is constructed from their locations. The KD tree is used for optimal searching of the closest building to the user query point. 
+The entire algorithmic process is included in the `optimization2.py` file. The basic functions used in calculations are located in the `functions.py` file.
+The algorithm involves the following steps:
+- All the input buildings are loaded and a KD tree is constructed from their coordinate locations. The KD tree is used for optimal searching of the 500 closest buildings to the user query point and listed in ascending order based on the euclidean distance from the user query point. 
+- 
 
 ## Structure
 
