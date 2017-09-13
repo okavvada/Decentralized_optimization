@@ -26,10 +26,14 @@ The required attributes in the csv file are:
 
 The residential and commercial population attributes are shown how they can be calculated in the example jupyter notebooks found in `jupyter_notebooks` folder.
 
+Other inputs in the model that can be customized are located in the `Parameters.py`. This file includes default parameters that are used in the analysis but can be overridden if better data of the specific location are known. 
+
 
 ## Algorithmic Process
-
-
+The entire algorithmic process is included in the `optimization2.py` file. 
+All the input buildings are loaded and a KD tree is constructed from their locations. The KD tree is used for optimal searching of the closest building to the user query point. 
 
 ## Structure
+
+
 
