@@ -9,7 +9,7 @@ import flask
 from flask import Flask, request
 from optimization2 import *
 
-# set the project root directory as the static folder, you can set others.
+
 app = Flask(__name__)
 
 @app.route('/')
