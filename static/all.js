@@ -256,8 +256,8 @@ var controlUIGHG = document.getElementById('controlUIGHG');
 	});
 
 
-var a = 9.5;
-var b = -0.3;
+var a = 7;
+var b = -0.18;
 var c = 0;
 var d = 0;
 var direct = 0;
@@ -303,7 +303,7 @@ document.getElementById("direct_val").onchange = function() {
 
 
 			map.data.setStyle(function(feature) {
-				var color = '#6f786a';
+				var color = '#42e2f4';
 				var myscale =  4;
 			          if (feature.getProperty('accept') == 'yes') {
 			            color = '#f00';
