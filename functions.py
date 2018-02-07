@@ -36,9 +36,9 @@ def populate_Graph(G, start, data):
 
 def find_MST_distance(G, start, previous_dist):
     distance = 9999999999
-    for i in G.edge[start]:
-        if i!=start and G.edge[start][i].get('weight', 1)<distance:
-            distance = G.edge[start][i].get('weight', 1)
+    for s, d in G.edges(start):
+        if d!=start and G.get_edge_data(start, d).get('weight', 1)<distance:
+            distance = G.get_edge_data(start, d).get('weight', 1)
     MST_distance = previous_dist + distance
     return MST_distance
 
