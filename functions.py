@@ -158,15 +158,15 @@ def find_conveyance_cost(building_elevation, totals_elevation, floors, building_
     return pumping_cost
 
 
-def pump_GHG_building(floors, building_pop_residential, building_pop_commercial):
+def pump_GHG_building(floors, building_pop_residential, building_pop_commercial, electricity_GHG):
     flow_building = calc_water_flow(building_pop_residential, building_pop_commercial, 0, 0) #m3/day
     energy = pump_energy_building(floors, building_pop_residential, building_pop_commercial)/flow_building #MJ/m3
-    pump_GHG = energy/3.6*P.electricity_GHG #kg/m3
+    pump_GHG = energy/3.6*electricity_GHG #kg/m3
     return pump_GHG #kg/m3
 
-def find_treatment_GHG(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d):
+def find_treatment_GHG(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d, electricity_GHG):
     treat_energy = find_treatment_energy(building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, a, b, c, d)
-    treat_GHG = treat_energy/3.6*P.electricity_GHG 
+    treat_GHG = treat_energy/3.6*electricity_GHG 
     return treat_GHG #kg/m3
 
 def find_treatment_embodied_GHG(ttype=False):
@@ -185,9 +185,9 @@ def find_infrastructure_GHG(building_pop_residential, building_pop_commercial,  
     pipe_m3 = pipe/(flow*365) #kg/m3
     return pipe_m3
 
-def find_conveyance_GHG(building_elevation, totals_elevation, floors, building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, totals_pumping):
+def find_conveyance_GHG(building_elevation, totals_elevation, floors, building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, totals_pumping, electricity_GHG):
     pump_energy = find_conveyance_energy(building_elevation, totals_elevation, floors, building_pop_residential, building_pop_commercial,  totals_pop_residential, totals_pop_commercial, totals_pumping)
-    pumping_GHG = pump_energy/3.6*P.electricity_GHG #kg/m3
+    pumping_GHG = pump_energy/3.6*electricity_GHG #kg/m3
     return pumping_GHG
 
 

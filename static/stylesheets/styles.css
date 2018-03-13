@@ -1,0 +1,204 @@
+#map {
+  height: 100%;
+      }
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+  #img{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+    width: 10%;
+    height: 10%;
+  }
+
+#img2{
+    position: absolute;
+    top: 35%;
+    left: 47%;
+    transform: translate(-50%, -50%)
+    width: 5%;
+    height: 5%;
+  }
+
+#legend {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    padding: 10px;
+    margin: 10px;
+    border: 3px solid #000;
+  }
+
+#results {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    padding: 10px;
+    margin-right: 10px;
+    border: 3px solid #000;
+  }
+
+#operational_energy {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid #000;
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    width: 260px;
+    height: 175px;
+  }
+
+#operational_energy .vals{
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  font-size: 12px;
+  margin-left: 30px;
+}
+
+h3 {
+  margin:0px;
+}
+
+h4 {
+  margin:2px;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.value{
+  width: 50px;
+  margin-right:20px;
+  margin-bottom:5px;
+  padding-left: 3px;
+}
+
+#set_value{
+  border: 1px solid #abadb2;
+  background-color: #e6e9ed;
+  margin-left: 20px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-bottom: 2px;
+}
+
+#direct{
+  border: 1px solid #abadb2;
+  background-color: #e6e9ed;
+  margin-left: 10px;
+  padding-right: 5px;
+  padding-left: 2px;
+  padding-bottom: 2px;
+}
+
+#electricity_mix{
+  border: 1px solid #abadb2;
+  background-color: #e6e9ed;
+  margin-left: 10px;
+  padding-right: 5px;
+  padding-left: 2px;
+  padding-bottom: 2px;
+}
+
+#custom_mix{
+  border: 1px solid #abadb2;
+  background-color: #e6e9ed;
+  margin-left: 10px;
+  padding-right: 5px;
+  padding-left: 2px;
+  padding-bottom: 2px;
+  padding-top: 2px;
+}
+
+
+#controlUICost {
+  background-color: #fff;
+  border: 1px solid #e6e9ed;
+  border-radius: 1px;
+  margin-top: 8px;
+  box-shadow: 0px 2px 2px #a1a4a8;
+  cursor: pointer;
+  text-align: center;
+}
+
+#controlTextCost {
+  color:  #2F3030;
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 35px;
+  width:40px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+ #controlUIEnergy {
+  background-color: #fff;
+  border: 1px solid #e6e9ed;
+  border-radius: 1px;
+  margin-top: 8px;
+  box-shadow: 0px 2px 2px #a1a4a8;
+  cursor: pointer;
+  text-align: center;
+}
+
+#controlTextEnergy {
+  color: #2F3030;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 35px;
+  width:60px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#controlUIGHG {
+  background-color: #fff;
+  border: 1px solid #e6e9ed;
+  border-radius: 1px;
+  margin-top: 8px;
+  box-shadow: 0px 2px 2px #a1a4a8;
+  cursor: pointer;
+  text-align: center;
+}
+
+#controlTextGHG {
+  color:  #2F3030;
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 35px;
+  width:40px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.tooltip-wrap {
+  position: relative;
+}
+
+.tooltip-content {
+  display: none;
+  position: absolute;
+  background-color: #c8b3e0;
+  padding: 0.2em;
+  z-index: 99;
+  color: #000;
+  border: 1px solid #000;
+  font-size: 14px;
+  
+}
+
+.tooltip-wrap:hover .tooltip-content {
+  display: block;
+  border-radius:2px;
+  position: absolute;
+}

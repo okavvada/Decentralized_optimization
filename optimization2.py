@@ -28,7 +28,7 @@ X_lat_lon = list(zip(data_all['y_lat'],data_all['x_lon']))
 
 tree = spatial.KDTree(X_lat_lon)
 
-def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
+def getServiceArea(queryPoint, path, metric, a, b, c, d, direct, electricity_GHG):
 	t2 = time.time()
 
 	begin_time = time.time() - t2
@@ -89,8 +89,8 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 
 	#Calculate GHG
 	if metric == 'GHG':
-		inbuilding_pumping = pump_GHG_building(inbuilding_floors, SUM_pop_residential, SUM_pop_commercial)
-		inbuilding_treatment = find_treatment_GHG(SUM_pop_residential, SUM_pop_commercial, 0, 0, a, b, c, d) 
+		inbuilding_pumping = pump_GHG_building(inbuilding_floors, SUM_pop_residential, SUM_pop_commercial, electricity_GHG)
+		inbuilding_treatment = find_treatment_GHG(SUM_pop_residential, SUM_pop_commercial, 0, 0, a, b, c, d, electricity_GHG) 
 		inbuilding_treatment_embodied = find_treatment_embodied_GHG(ttype = True) + find_treatment_direct_GHG(direct)
 		infrastructure = find_infrastructure_GHG(SUM_pop_residential, SUM_pop_commercial, 0, 0, total_dist)
 		total_metric = inbuilding_pumping + inbuilding_treatment + inbuilding_treatment_embodied + infrastructure
@@ -163,8 +163,8 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct):
 
 		#Calculate GHG
 		if metric == 'GHG':
-			conveyance = totals['pumping'] + find_conveyance_GHG(building_elevation, totals['ELEV_treat'], building_floors, building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], totals['pumping'])
-			treatment = find_treatment_GHG(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], a, b, c, d)
+			conveyance = totals['pumping'] + find_conveyance_GHG(building_elevation, totals['ELEV_treat'], building_floors, building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], totals['pumping'], electricity_GHG)
+			treatment = find_treatment_GHG(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], a, b, c, d, electricity_GHG)
 			treatment_embodied = find_treatment_embodied_GHG(ttype = True)
 			treatment_direct = find_treatment_direct_GHG(direct)
 			infrastructure =  find_infrastructure_GHG(building_population_residential, building_population_commercial, totals['SUM_pop_residential'], totals['SUM_pop_commercial'], piping_distance)

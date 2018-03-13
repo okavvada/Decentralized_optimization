@@ -26,11 +26,12 @@ def lat_lng():
   c = float(request.args.get('c'))
   d = float(request.args.get('d'))
   direct = float(request.args.get('direct'))
+  ghg = float(request.args.get('electricity_GHG'))
 
-  return flask.jsonify(getMyGeoJSON(lat = lat, lng = lng, path = 'document.csv', metric = metric, a = a, b = b, c = c, d = d, direct = direct))
+  return flask.jsonify(getMyGeoJSON(lat=lat, lng=lng, path='document.csv', metric=metric, a=a, b=b, c=c, d=d, direct=direct, ghg=ghg))
 
-def getMyGeoJSON(lat,lng, path, metric, a, b, c, d, direct):
-  points = getServiceArea((lat,lng), path, metric,  a, b, c, d, direct)
+def getMyGeoJSON(lat,lng, path, metric, a, b, c, d, direct, ghg):
+  points = getServiceArea((lat,lng), path, metric,  a, b, c, d, direct, ghg)
   return points
 
 if __name__ == '__main__':

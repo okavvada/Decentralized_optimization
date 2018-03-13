@@ -1,5 +1,32 @@
 var map;
 
+electricity_mixes = {
+  'SFPUC': 0.08,
+  'US': 0.08,
+  'NG': 0.08,
+  'NGCC': 0.08,
+  'Coal': 0.08,
+  'Lignin': 0.08,
+  'WECC': 0.08,
+  'MRO': 0.08,
+  'SPP': 0.08,
+  'TRE': 0.08,
+  'SERC': 0.08,
+  'RFC': 0.08,
+  'NPCC': 0.08,
+  'FRCC': 0.08,
+  'Custom': 0.56
+}
+
+function electricitymixSelect() {
+  var myList=document.getElementById("myList");
+  var electricity_region = myList.options[myList.selectedIndex].value;
+  var electricity_GHG = electricity_mixes[electricity_region];
+  set_value = document.getElementById("custom_mix_value");
+  set_value.value = electricity_GHG;
+  return electricity_GHG
+}
+
 
 function initMap() {
 	var styledMapType = new google.maps.StyledMapType(
@@ -178,6 +205,7 @@ function initMap() {
 
 var i = 0;
 
+
 	function placeMarker(location) {
     var marker = new google.maps.Marker({
         position: location, 
@@ -185,16 +213,6 @@ var i = 0;
         map: map
     });
 }
-
-	function get_pop(feature){
-		var pop = feature.getProperty('population');
-	  	return pop
-	};
-
-	function get_houses(feature){
-		var house = feature.getProperty('houses');
-	  	return house
-	};
 
 
 var image = {
@@ -261,6 +279,7 @@ var b = -0.18;
 var c = 0;
 var d = 0;
 var direct = 0;
+var electricity_GHG_val = electricitymixSelect()
 
 document.getElementById("value_a").onchange = function() {
     a = document.getElementById("value_a").value;
@@ -284,6 +303,17 @@ document.getElementById("direct_val").onchange = function() {
     return direct
 }
 
+document.getElementById("custom_mix_value").onchange = function() {
+    electricity_GHG_val = document.getElementById("custom_mix_value").value;
+    return electricity_GHG_val
+}
+
+document.getElementById("myList").onchange = function() {
+    electricity_GHG_val = electricitymixSelect()
+    return electricity_GHG_val
+}
+
+
 	google.maps.event.addListener(map, 'click', function(event) {
 		placeMarker(event.latLng);
 		var place_lat_lon = event.latLng
@@ -297,7 +327,8 @@ document.getElementById("direct_val").onchange = function() {
 			b: b,
 			c: c,
 			d: d,
-			direct: direct
+			direct: direct,
+      electricity_GHG: electricity_GHG_val
 		}, function(data) {
 			map.data.addGeoJson(data);
 

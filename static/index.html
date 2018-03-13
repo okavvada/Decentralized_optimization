@@ -4,167 +4,8 @@
     <title>Water Reuse Optimization</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      #img{
-      	position: absolute;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -50%)
-		width: 10%;
-		height: 10%;
-      }
-
-    #img2{
-        position: absolute;
-        top: 35%;
-        left: 47%;
-        transform: translate(-50%, -50%)
-        width: 5%;
-        height: 5%;
-      }
-
-    #legend {
-        font-family: Arial, sans-serif;
-        background: #fff;
-        padding: 10px;
-        margin: 10px;
-        border: 3px solid #000;
-      }
-
-    #results {
-        font-family: Arial, sans-serif;
-        background: #fff;
-        padding: 10px;
-        margin-right: 10px;
-        border: 3px solid #000;
-      }
-
-    #operational_energy {
-        font-family: Arial, sans-serif;
-        background: #fff;
-        font-size: 14px;
-        padding: 5px;
-        border: 1px solid #000;
-        position: absolute;
-        top: 50px;
-        left: 10px;
-        width: 260px;
-        height: 140px;
-      }
-
-    h3 {
-      margin:0px;
-    }
-
-    h4 {
-      margin:2px;
-      text-align: center;
-      text-decoration: underline;
-    }
-
-    .value{
-      width: 50px;
-      margin-right:20px;
-      margin-bottom:5px;
-      padding-left: 3px;
-    }
-
-    #set_value{
-      border: 1px solid #abadb2;
-      background-color: #e6e9ed;
-      margin-left: 20px;
-      padding-right: 4px;
-      padding-left: 5px;
-      padding-bottom: 2px;
-    }
-
-    #direct{
-      border: 1px solid #abadb2;
-      background-color: #e6e9ed;
-      margin-left: 10px;
-      padding-right: 5px;
-      padding-left: 2px;
-      padding-bottom: 2px;
-    }
-
-
-    #controlUICost {
-      background-color: #fff;
-      border: 1px solid #e6e9ed;
-      border-radius: 1px;
-      margin-top: 8px;
-      box-shadow: 0px 2px 2px #a1a4a8;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    #controlTextCost {
-      color:  #2F3030;
-      font-family: Arial, sans-serif;
-      font-weight: normal;
-      font-size: 16px;
-      line-height: 35px;
-      width:40px;
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-
-     #controlUIEnergy {
-      background-color: #fff;
-      border: 1px solid #e6e9ed;
-      border-radius: 1px;
-      margin-top: 8px;
-      box-shadow: 0px 2px 2px #a1a4a8;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    #controlTextEnergy {
-      color: #2F3030;
-      font-family: Arial, sans-serif;
-      font-weight: bold;
-      font-size: 16px;
-      line-height: 35px;
-      width:60px;
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-
-    #controlUIGHG {
-      background-color: #fff;
-      border: 1px solid #e6e9ed;
-      border-radius: 1px;
-      margin-top: 8px;
-      box-shadow: 0px 2px 2px #a1a4a8;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    #controlTextGHG {
-      color:  #2F3030;
-      font-family: Arial, sans-serif;
-      font-weight: normal;
-      font-size: 16px;
-      line-height: 35px;
-      width:40px;
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-
-    </style>
-    <script type="text/javascript" src="/static/jquery.js"></script>
+    <link rel="stylesheet" href="static/stylesheets/styles.css">
+    <script type="text/javascript" src="static/jquery.js"></script>
   </head>
   <body>
     <div id="map"></div>
@@ -173,17 +14,34 @@
     <div id="operational_energy"><h4>Treatment Operational Energy</h4><img src="/static/images/energy_equation.png">
     <span id="set_value">a=</span><input class="value" type='text' id="value_a" value='7' /><span id="set_value">b=</span><input class="value" type='text' id="value_b" value='-0.18'/>
     <br /><span id="set_value">c=</span><input class="value" type='text' id="value_c" value='0' /><span id="set_value">d=</span><input class="value" type='text' id="value_d" value='0'/>
-    <br /><span id="direct">direct GHG (kgCO<sub>2</sub>/m<sup>3</sup>)</span><input class="value" type='text' id="direct_val" value='0'/></div>
+    <br /><span id="direct">direct GHG (kgCO<sub>2</sub>/m<sup>3</sup>)</span><input class="value" type='text' id="direct_val" value='0'/>
+    <form><span class='tooltip-wrap' id='electricity_mix'>electricity mix [region]</span>
+      <select id='myList' onchange="electricitymixSelect()">
+        <option value='SFPUC'>SFPUC</option>
+        <option value='US'>US</option>
+        <option value='NG'>NG</option>
+        <option value='NGCC'>NGCC</option>
+        <option value='NG'>Coal</option>
+        <option value='Lignin'>Lignin</option>
+        <option value='Renewables'>Renewables</option>
+        <option value='WECC'>WECC Mix</option>
+        <option value='MRO'>MRO Mix</option>
+        <option value='SPP'>SPP Mix</option>
+        <option value='TRE'>TRE Mix</option>
+        <option value='SERC'>SERC Mix</option>
+        <option value='RFC'>RFC Mix</option>
+        <option value='NPCC'>NPCC Mix</option>
+        <option value='FRCC'>FRCC Mix</option>
+        <option value='Custom'>Custom</option></select></form>
+      <span id='electricity_mix' class='vals'> [gCO2/kWh] = </span><input value='0.08' type='text' id='custom_mix_value'></div>
     <div id="controlUIEnergy"></div>
     <div id="controlTextEnergy">Energy</div>
     <div id="controlUICost"></div>
     <div id="controlTextCost">Cost</div>
     <div id="controlUIGHG"></div>
     <div id="controlTextGHG">GHG</div>
-    <script src="/static/all.js">
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
-    async defer></script>
+    <script src="/static/all.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
     <img src="/static/images/page-loader.gif" id="img" style="display:none"/ >
     <img src="/static/images/calculating3.png" id="img2" style="display:none"/ >
   </body>
