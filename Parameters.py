@@ -12,7 +12,6 @@ lifetime_WWTP = 30 #years Eggimann connection rates
 pump_efficiency = 0.45
 in_builing_piping_sf = 0.05 #m/m2 #Hasik LCA building
 electricity_cost = 0.12 #$/kWh EIA
-electricity_GHG = 0.08 #kgCO2/kWh Hendrickson  ###CHECK
 US_electricity_GHG = 0.59 #kgCO2/kWh (EIA for electricity mix and LCA emission factors Stokes and Horvath http://uc-ciee.org/downloads/Life-cycleHorvath.pdf)
 treatment_embodied_GHG = 0.06 #kgCO2/m3 Kavvada
 treatment_embodied_energy = 0.3 #kWh/m3 Kavvada

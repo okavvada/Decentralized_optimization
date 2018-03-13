@@ -2,20 +2,20 @@ var map;
 
 electricity_mixes = {
   'SFPUC': 0.08,
-  'US': 0.08,
-  'NG': 0.08,
-  'NGCC': 0.08,
-  'Coal': 0.08,
-  'Lignin': 0.08,
-  'WECC': 0.08,
-  'MRO': 0.08,
-  'SPP': 0.08,
-  'TRE': 0.08,
-  'SERC': 0.08,
-  'RFC': 0.08,
-  'NPCC': 0.08,
-  'FRCC': 0.08,
-  'Custom': 0.56
+  'US': 0.506,
+  'CA': 0.287,
+  'NGCC': 0.395,
+  'Coal': 1.1,
+  'Lignin': 0.01,
+  'WECC': 0.48,
+  'MRO': 0.81,
+  'SPP': 0.85,
+  'TRE': 0.59,
+  'SERC': 0.63,
+  'RFC': 0.69,
+  'NPCC': 0.31,
+  'FRCC': 0.54,
+  'Custom': 0.506
 }
 
 function electricitymixSelect() {
