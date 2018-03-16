@@ -57,7 +57,7 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct, electricity_GHG
 	square_footage = data.iloc[int(index_0)]['Area_m2']
 	MIN_ELEV = data.iloc[int(index_0)]['ELEV_treat']
 	inbuilding_floors = data.iloc[int(index_0)]['num_floor']
-	deque_length = 30
+	deque_length = 40
 	mydeque = collections.deque(maxlen=deque_length)
 	data['metric'] = 0
 	data['accept'] = 'start'	
