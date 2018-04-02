@@ -239,12 +239,12 @@ def getServiceArea(queryPoint, path, metric, a, b, c, d, direct, electricity_GHG
 	# print("out time %s "%elapsed_out, file=stderr)
 	# print("loop time %s "%elapsed2, file=stderr)
 
-	with open(path,'a') as f:
-	    writer=csv.writer(f)
-	    writer.writerow([])
-	    writer.writerow([queryPoint,sum_population,total_metric, pumping_tot, treatment_tot, treatment_embodied_tot, piping_tot])
+	# with open(path,'a') as f:
+	#     writer=csv.writer(f)
+	#     writer.writerow([])
+	#     writer.writerow([queryPoint,sum_population,total_metric, pumping_tot, treatment_tot, treatment_embodied_tot, piping_tot])
 
-	iteration_results_df = pd.DataFrame(iteration_results)
-	iteration_results_df.to_csv('iteration_results.csv')
+	# iteration_results_df = pd.DataFrame(iteration_results)
+	# iteration_results_df.to_csv('iteration_results.csv')
 
 	return point_properties
