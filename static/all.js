@@ -413,7 +413,7 @@ document.getElementById("myList").onchange = function() {
         },
         blackDot: {
             name: 'unassessed building',
-            icon: '/static/images/greydot.png'
+            icon: '/static/images/aquadot.png'
         }
         };
 
