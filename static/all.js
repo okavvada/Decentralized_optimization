@@ -204,14 +204,19 @@ function initMap() {
 	});
 
 var i = 0;
+positioner = []
 
 
 	function placeMarker(location) {
-    var marker = new google.maps.Marker({
+    positioner.forEach(function(marker) {
+            marker.setMap(null);
+          });
+    positioner = [];
+    positioner.push(new google.maps.Marker({
         position: location, 
         icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
         map: map
-    });
+    }));
 }
 
 
@@ -315,6 +320,10 @@ document.getElementById("myList").onchange = function() {
 
 
 	google.maps.event.addListener(map, 'click', function(event) {
+    map.data.forEach(function(feature) {
+    // If you want, check here for some constraints.
+    map.data.remove(feature);
+});
 		placeMarker(event.latLng);
 		var place_lat_lon = event.latLng
 		$('#img').show(); 
