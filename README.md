@@ -1,6 +1,7 @@
 # Optimal Scale for Decentralized Water Reuse
 
 This repository consists of the code base for the web tool developed under the publication:
+
 [Kavvada, Olga, Kara L. Nelson, and Arpad Horvath. "Spatial optimization for decentralized non-potable water reuse." Environmental Research Letters (2018).](http://iopscience.iop.org/article/10.1088/1748-9326/aabef0/meta)
 
 The webtool can be found free of charge at: https://water-reuse-map.herokuapp.com/
