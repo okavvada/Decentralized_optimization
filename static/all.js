@@ -36,6 +36,10 @@ function infoWindow() {
     }
 }
 
+function goToPage(url){
+  window.location.href = url;
+}
+
 
 function initMap() {
 	var styledMapType = new google.maps.StyledMapType(
