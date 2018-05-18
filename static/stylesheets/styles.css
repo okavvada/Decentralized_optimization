@@ -65,6 +65,8 @@ html, body {
 
 h3 {
   margin:0px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
 }
 
 h4 {
@@ -201,4 +203,42 @@ h4 {
   display: block;
   border-radius:2px;
   position: absolute;
+}
+
+#info{
+  position: absolute;
+  top: 260px;
+  left: 12px;
+  padding: 3px;
+  padding-top: 8px;
+  padding-bottom: 6px;
+  border-radius: 50px;
+  border: 1px solid #00087a;
+  width: 120px;
+  cursor: pointer;
+  color: #00087a;
+  font-size: 12px;
+}
+
+#myInfo{
+  position: absolute;
+  top: 310px;
+  left: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  width: 600px;
+  border: 1px solid #000;
+  background-color: #fff;
+  font-size: 16px;
+}
+
+#contact{
+  position: absolute;
+  top: 93%;
+  left: 80%;
+  padding: 5px;
+  background-color: #f9f9f9;
+  opacity: 0.8;
+  font-size: 15px;
+  cursor: pointer;
 }

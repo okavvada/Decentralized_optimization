@@ -27,6 +27,15 @@ function electricitymixSelect() {
   return electricity_GHG
 }
 
+function infoWindow() {
+    var x = document.getElementById("myInfo");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
 
 function initMap() {
 	var styledMapType = new google.maps.StyledMapType(
@@ -197,6 +206,7 @@ function initMap() {
 			lng: -122.443439
 		},
 		zoom: 13, 
+    draggableCursor: 'default',
 		mapTypeControlOptions: {
             mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
                     'styled_map']
@@ -366,10 +376,15 @@ document.getElementById("myList").onchange = function() {
 
 			      });
 
-			var results_text = "<br /><u>Cluster " + i +"</u> (" + metric + ")<br />Houses: " + data.features[1].properties.houses + "<br />Population: " + data.features[1].properties.population+ "<br />";
+			var results_text = "<br /><u>Water Reuse System </u> (" + metric + ")<br />Houses: " + data.features[1].properties.houses + "<br />Population: " + data.features[1].properties.population+ "<br />";
   			var results = document.getElementById('results');
 			results.style.fontSize = "14px";
-			var div = document.createElement('div');
+      var elem = document.getElementById('res');
+      if (elem !== null) {
+        document.getElementById('res').remove()
+      }
+      var div = document.createElement('div');
+      div.id = 'res'
 			div.innerHTML = results_text;
 			results.appendChild(div);
 
@@ -379,27 +394,22 @@ document.getElementById("myList").onchange = function() {
 			$('#img2').hide();
 
   			// When the user hovers, open an infowindow
-			map.data.addListener('mouseover', function(event) {
+			map.data.addListener('click', function(event) {
 				index = event.feature.getProperty("index");
 				floors = event.feature.getProperty("num_floor");
 				sum_pop_residential = Math.ceil(event.feature.getProperty("SUM_pop_residential"));
 				sum_pop_commercial = Math.ceil(event.feature.getProperty("SUM_pop_commercial"));
 				total_pop = event.feature.getProperty("population");
 				total_buildings = event.feature.getProperty("houses");
-				var html = "<u>Cluster " + i +"</u><br />floors: " + floors + "<br />Residential_Pop: " + sum_pop_residential + "<br />Commercial_Pop: " + sum_pop_commercial;
+				var html = "<u>Building Info </u><br />floors: " + floors + "<br />Residential Population: " + sum_pop_residential + "<br />Commercial Population: " + sum_pop_commercial;
       			infowindow.setContent(html);
       			infowindow.setPosition(event.latLng);
       			infowindow.setOptions({disableAutoPan: true});
       			infowindow.open(map);
   			});
 
-  			map.data.addListener('mouseout', function(event) {
-  				infowindow.close();
-  			})
-
 		}) 
 
-		i +=1;
 	}); 
 
 	var icons = {
@@ -424,7 +434,7 @@ document.getElementById("myList").onchange = function() {
 	      var name = type.name;
 	      var icon = type.icon;
 	      var div = document.createElement('div');
-	      div.innerHTML = '<img src="' + icon + '"> ' + name;
+	      div.innerHTML = '<img src="' + icon +  '" height="12" width="11">' + '   ' + name;
 	      legend.appendChild(div);
 
     }
