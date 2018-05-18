@@ -380,7 +380,25 @@ document.getElementById("myList").onchange = function() {
 
 			      });
 
-			var results_text = "<br /><u>Water Reuse System </u> (" + metric + ")<br />Houses: " + data.features[1].properties.houses + "<br />Population: " + data.features[1].properties.population+ "<br />";
+      if (metric == 'energy'){
+          metric_name = 'Energy Intensity: '
+          metric_unit = ' kWh/m<sup>3</sup>'
+        }
+        if (metric == 'GHG'){
+          metric_name = 'GHG Intensity: '
+          metric_unit = ' kgCO<sub>2</sub>/m<sup>3</sup>'
+        }
+        if (metric == 'cost'){
+          metric_name = 'Cost Intensity: '
+          metric_unit = ' USD/m<sup>3</sup>'
+        }
+
+      metric_value = Math.round(data.features[1].properties.metric*10)/10;
+
+			var results_text = ("<br /><u>Water Reuse System </u> (" + metric + 
+                          ")<br />Houses: " + data.features[1].properties.houses + 
+                          "<br />Population: " + data.features[1].properties.population +
+                          "<br />" + metric_name + metric_value + metric_unit);
   			var results = document.getElementById('results');
 			results.style.fontSize = "14px";
       var elem = document.getElementById('res');
@@ -405,7 +423,10 @@ document.getElementById("myList").onchange = function() {
 				sum_pop_commercial = Math.ceil(event.feature.getProperty("SUM_pop_commercial"));
 				total_pop = event.feature.getProperty("population");
 				total_buildings = event.feature.getProperty("houses");
-				var html = "<u>Building Info </u><br />floors: " + floors + "<br />Residential Population: " + sum_pop_residential + "<br />Commercial Population: " + sum_pop_commercial;
+
+				var html = ("<u>Building Info </u><br />floors: " + floors + 
+                    "<br />Residential Population: " + sum_pop_residential + 
+                    "<br />Commercial Population: " + sum_pop_commercial);
       			infowindow.setContent(html);
       			infowindow.setPosition(event.latLng);
       			infowindow.setOptions({disableAutoPan: true});
