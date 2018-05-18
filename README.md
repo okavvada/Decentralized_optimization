@@ -6,7 +6,7 @@ The webtool can be found free of charge at:
 
 If you wish to use the tool for your own analysis please provide proper attribution by citing the work:
 
-''' '''
+`http://iopscience.iop.org/article/10.1088/1748-9326/aabef0/meta`
 
 ## Background
 The core and integral criterion for sustainable non-potable reuse (NPR) implantation is the issue of system scale. Larger facilities can benefit from the increased "economies of scale" in treatment but in the context of water reuse a tradeoff occurs as in a centralized system the water would be further away from the point of demand which exacerbates the upgradient conveyance and distribution impacts. This project defines a modeling method for decentralized water reuse systems to estimate their economic and environmental impacts under real topographical and demographic conditions. The developed tool estimates both the financial cost and environmental impacts of NPR as a function of treatment scale and optimized conveyance networks. It is based on a heuristic modeling approach using geospatial algorithms to determine the optimal degree of decentralization. The webtool is developed to assess and visualize alternative NPR system designs considering topography, economies of scale and building size.
